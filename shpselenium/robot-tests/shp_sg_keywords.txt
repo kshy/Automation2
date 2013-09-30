@@ -537,7 +537,7 @@ Enter details in Family Member for Child
     Input Text    name=dependentInfo.dependents[${ChildNumber}].birthDayDate    10/10/1999
     Input Text    name=dependentInfo.dependents[${ChildNumber}].ssn    222-22-2222
     Select From List    name=dependentInfo.dependents[${ChildNumber}].heightFeet    5
-    Select From List    name=dependentInfo.dependents[${Chil;dNumber}].heightInches    4
+    Select From List    name=dependentInfo.dependents[${ChildNumber}].heightInches    4
     Input Text    name=dependentInfo.dependents[${ChildNumber}].netWeight    120
     Select Radio Button    dependentInfo.dependents[${ChildNumber}].sameAddress    Y
     Select Radio Button    dependentInfo.dependents[${ChildNumber}].adoptionGuardianship    N
@@ -710,7 +710,9 @@ Search for case
     
 Open enrollment after search
     Click Button    View
+    Wait a Bit
     Click Link    New Business
+    Wait a Bit
     Click Button    View
 
 UW Approve enrollment
@@ -936,6 +938,15 @@ Setup
 
 Teardown
     Run Keyword Unless    "${DEBUG_MODE}"=="true"    Close All Browsers
+
+Setup of Test
+    Initialize Variables
+    ${isPortalPagedisplayed}=    Get Matching Xpath Count     //a[contains(text(),'Returning User Login')]
+    Run Keyword If     '${isPortalPagedisplayed}'=='0'    Go to the Portal page
+
+Go to the Portal page
+    Go To    ${site}
+    Wait Until Page Contains    For people looking    ${SELENIUM_TIMEOUT}    Error on main page
 
 Teardown of Test
     Run Keyword If Test Failed    Log Location
