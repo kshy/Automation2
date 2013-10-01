@@ -69,6 +69,7 @@ Initialize Variables
     ${child1FName}=    Catenate    ConeFN${randStr}    
     ${child1LName}=    Catenate    ConeLN${randStr}
     ${child2LName}=    Catenate    CtwoLN${randStr}
+    ${guardianFName}=    Catenate    GF${randStr}
     ${fname2}=    Generate Random String    6    [UPPER]
     ${fname3}=    Generate Random String    7    [UPPER]
     ${selected_features}    Create List
@@ -78,6 +79,7 @@ Initialize Variables
     ${consumerBirthDate}=    Set Variable    02141974
     ${email}=    Set Variable    tvolvk.test@gmail.com
     ${emailPwd}=    Set Variable    Secur1ty_Auto
+    ${isGuardian}=    Set Variable    0
     Set Test Variable    ${ifpCaseName}
     Set Test Variable    ${zipCode}
     Set Test Variable    ${randNbr}
@@ -99,9 +101,11 @@ Initialize Variables
     Set Test Variable    ${child1LName}
     Set Test Variable    ${spouseLName}
     Set Test Variable    ${child1LName}
+    Set Test Variable    ${guardianFName}
     Set Test Variable    ${email}
     Set Test Variable    ${emailPwd}
     Set Test Variable    ${consumerBirthDate}
+    Set Test Variable    ${isGuardian}
 
 #Enter demographic data for the primary applicant
 #    [Arguments]    ${zip}    ${county_index}    ${fname}    ${date}    ${gender}    ${tobacco}
@@ -1322,8 +1326,8 @@ Broker Enters Primary Applicant details, selects Coverage for
     Input Text    name=Application.Applicant.Ssn    ${ssnCode}
 #    Input Text    name=Application.Applicant.Dob    11231981
     Select Radio Button    Application.Applicant.Gender    Male
-    Select Radio Button    Application.Applicant.Tobacco    Yes
-    Run Keyword If    '${coverageFor}'=='My Child'    Enter Legal Guardian Info and update Child info
+    Run Keyword Unless    '${coverageFor}'=='My Child'    Select Radio Button    Application.Applicant.Tobacco    Yes
+    Run Keyword If    '${coverageFor}'=='My Child'    Enter Legal Guardian Info and update Coverage selection
     Execute Javascript    $("[class='buttonNext']").click()
 
 Enter Primary Applicant details - Consumer
@@ -1413,7 +1417,7 @@ Enter details in Submit Application on Behalf of Applicant page
     ${isDSdisplayed}=    Get Matching Xpath Count     //input[@name='Application.Dependent[0].Signature.Agreed_To_Terms']
 #    Run Keyword If    '${isApNdisplayed}'=='1'    Select Checkbox    name=Application.Signature.Incarcerated_Name
 #    Select Checkbox    Application.Signature.SBC_Provided
-    ${fname}=    Set Variable If    '${isGuardian}'=='y'    ${fname2}
+#    Run Keyword If    '${isGuardian}'=='1'    ${fname}=    Set Variable    ${guardianFName}
     Select Checkbox    xpath=//input[@name='Application.Signature.Agreed_To_Terms' and not(@disabled)]
     Input Text    xpath=//input[@name='Application.Signature.First_Name' and not(@disabled)]    ${fname}
     Input Text    xpath=//input[@name='Application.Signature.Middle_Initial' and not(@disabled)]    ${mname}
@@ -1533,9 +1537,9 @@ Fill Signature for Spouse
 #
 Enter Legal Guardian Info and update Coverage selection
     Select From List    Application.Coverage_For    My Child/Children
-    Wait Until Page Contains    For a child-only application, please enter    ${SELENIUM_TIMEOUT}    Child-only text wasn't displayed
+    Wait Until Page Contains    For a child-only application,    ${SELENIUM_TIMEOUT}    Child-only text wasn't displayed
     Wait Until Page Contains    Legal Guardian Information    ${SELENIUM_TIMEOUT}    Legal Guardian section wasn't displayed
-    Input Text    Application.Applicant.Guardian.First_Name    ${fname2}
+    Input Text    Application.Applicant.Guardian.First_Name    ${guardianFName}
     Input Text    Application.Applicant.Guardian.Last_Name    ${userLName}
     Select From List    Application.Applicant.Guardian.Relationship    Parent
     Input Text    Application.Applicant.Guardian.Home_Phone    1111111111
@@ -1544,7 +1548,7 @@ Enter Legal Guardian Info and update Coverage selection
     Input Text    Application.Applicant.Guardian.City    Phila
     Select From List    Application.Applicant.Guardian.State    WI
     Input Text    Application.Applicant.Guardian.Zip    54514
-    Set Global Variable    ${isGuardian}    y
+    Set Global Variable     ${isGuardian}    1
 #    Input Text    Application.Applicant.First_Name    ${child1FName}
 #    Input Text    Application.Applicant.Last_Name    ${child1LName}
 #    Input Text    Application.Applicant.Dob    09082007

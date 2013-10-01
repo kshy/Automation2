@@ -197,7 +197,7 @@ Consumer completes shopping - Child Only
 #    And Enter details in Employer Payment Arrangements page
     And Pass Verify Application page
     And Pass Authorized Representative page
-    And Enter details in Submit Application on Behalf of Applicant page
+    And Enter details in Submit Application on Behalf of Applicant page    ${guardianFName}    \    ${userLName}
     Then Wait Confirmation page
 
 Test Smoke test - Producer sends proposal and completes shopping - Primary
@@ -348,8 +348,7 @@ Producer sends proposal and completes shopping - Child Only
     ...
     ...    *Applicant combination :* Primary
     ...
-    [Tags]    shopping    agent
-#    draft
+    [Tags]    shopping    agent    draft
     
     Given Shah Broker logs in to application
     When Selects IFP Quoting
@@ -380,11 +379,12 @@ Producer sends proposal and completes shopping - Child Only
     And Selects Plan By Name    Classic $3,000 HDHP
     And Click Button    Apply
     And Broker completes Prior To Applying page    Broker Complete Online
+    And Wait a Bit
     And Wait Until Page Contains    Application Checklist
     And Wait a Bit
     And Verify that selected plan is in Cart
     And Click Link    Start Application
-    And Broker Enters Primary Applicant details, selects Coverage for     Myself
+    And Broker Enters Primary Applicant details, selects Coverage for     My Child
     And Pass Family Members page
     And Enter details in Prior Coverage page
     And Enter details in Payment Options page
