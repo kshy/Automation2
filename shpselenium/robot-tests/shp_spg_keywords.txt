@@ -138,13 +138,13 @@ Enter demographic data for the primary applicant
     Set Global Variable    ${selfTobacco}    ${tobacco}
 
 Enter details in Create IFP Case page
-    [Arguments]    ${zip}
+    [Arguments]    ${fname}=${userFname}    ${zip}=${zipCode}
     Wait Until Page Contains Element    name=caseProfileData.caseName    ${SELENIUM_TIMEOUT}    Create IFP Case page wasn't displayed or wrong page is displayed
     Wait a Bit
     Input Text    name=caseProfileData.caseName    ${ifpCaseName}
     Select From List    caseProfileData.caseState    WI
     Input Text    name=caseProfileData.caseZip    ${zip}
-    Input Text    name=caseProfileData.contactFirstName    ${userFName}
+    Input Text    name=caseProfileData.contactFirstName    ${fname}
     Input Text    name=caseProfileData.contactLastName     ${userLName}
     Input Text    name=caseProfileData.contactEmailAddress    ${email}
     Click Button    Continue
@@ -958,6 +958,11 @@ Close cart
 
     
 ################### Email and Print Keywords ###############
+Change plan display on page to
+    [Arguments]    ${plans_per_page}
+    Wait Until Page Contains Element    xpath=//span[@class='pagination-count _changeCount']/select    ${SELENIUM_TIMEOUT}
+    Select From List     xpath=//span[@class='pagination-count _changeCount']/select    ${plans_per_page}
+    Wait a Bit
 
 Switch to small view
     Wait Until Page Contains    Add to Cart    ${SELENIUM_TIMEOUT}
@@ -1408,6 +1413,7 @@ Enter details in Submit Application on Behalf of Applicant page
     ${isDSdisplayed}=    Get Matching Xpath Count     //input[@name='Application.Dependent[0].Signature.Agreed_To_Terms']
 #    Run Keyword If    '${isApNdisplayed}'=='1'    Select Checkbox    name=Application.Signature.Incarcerated_Name
 #    Select Checkbox    Application.Signature.SBC_Provided
+    ${fname}=    Set Variable If    '${isGuardian}'=='y'    ${fname2}
     Select Checkbox    xpath=//input[@name='Application.Signature.Agreed_To_Terms' and not(@disabled)]
     Input Text    xpath=//input[@name='Application.Signature.First_Name' and not(@disabled)]    ${fname}
     Input Text    xpath=//input[@name='Application.Signature.Middle_Initial' and not(@disabled)]    ${mname}
@@ -1533,12 +1539,12 @@ Enter Legal Guardian Info and update Coverage selection
     Input Text    Application.Applicant.Guardian.Last_Name    ${userLName}
     Select From List    Application.Applicant.Guardian.Relationship    Parent
     Input Text    Application.Applicant.Guardian.Home_Phone    1111111111
-#    Select Radio Button    Application.Applicant.Guardian.Address_Same_Primary    No
     Execute Javascript    $("[name='Application.Applicant.Guardian.Address_Same_Primary'][value='No']").click()
     Input Text    Application.Applicant.Guardian.Address_1    Blue Mound Drive 137
     Input Text    Application.Applicant.Guardian.City    Phila
     Select From List    Application.Applicant.Guardian.State    WI
     Input Text    Application.Applicant.Guardian.Zip    54514
+    Set Global Variable    ${isGuardian}    y
 #    Input Text    Application.Applicant.First_Name    ${child1FName}
 #    Input Text    Application.Applicant.Last_Name    ${child1LName}
 #    Input Text    Application.Applicant.Dob    09082007

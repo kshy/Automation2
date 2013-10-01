@@ -2,7 +2,7 @@
 Documentation     SG - Quote - Smoke Test
 Suite Setup       Setup
 Suite Teardown    Teardown
-Test Setup        Initialize Variables
+Test Setup        Setup of Test
 Test Teardown     Teardown of Test
 Resource          ../../shp_sg_keywords.txt
 

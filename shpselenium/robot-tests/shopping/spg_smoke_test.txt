@@ -197,7 +197,7 @@ Consumer completes shopping - Child Only
 #    And Enter details in Employer Payment Arrangements page
     And Pass Verify Application page
     And Pass Authorized Representative page
-    And Enter details in Submit Application on Behalf of Applicant page    ${fname2}    \    ${userLname}
+    And Enter details in Submit Application on Behalf of Applicant page
     Then Wait Confirmation page
 
 Test Smoke test - Producer sends proposal and completes shopping - Primary
@@ -211,7 +211,7 @@ Test Smoke test - Producer sends proposal and completes shopping - Primary
     
     Given Shah Broker logs in to application
     When Selects IFP Case
-    And Enter details in Create IFP Case page   53910
+    And Enter details in Create IFP Case page   Albert    53910
     And Wait Until Page Contains    Case Summary - Individual
     And Click Link    New Business
     And Start Quote
@@ -262,7 +262,7 @@ Producer completes shopping - Primary
     
     Given Shah Broker logs in to application
     When Selects IFP Case
-    And Enter details in Create IFP Case page   53910
+    And Enter details in Create IFP Case page   Norman    53910
     And Wait Until Page Contains    Case Summary - Individual
     And Click Link    New Business
     And Start Quote
@@ -340,3 +340,58 @@ Producer completes shopping - Family of 4
     And Pass Verify Application page
     And Enter details in Submit Application on Behalf of Applicant page    shah    \    broker
     Then Wait Confirmation page
+
+Producer sends proposal and completes shopping - Child Only
+    [Documentation]    
+    ...
+    ...    *User Type:* Broker
+    ...
+    ...    *Applicant combination :* Primary
+    ...
+    [Tags]    shopping    agent
+#    draft
+    
+    Given Shah Broker logs in to application
+    When Selects IFP Quoting
+    And Proceed to the Demographic page
+    And Enter demographic data for the primary applicant    54805    1    Victor    04/22/2012    Male    No
+    Click Link    Add Dependent
+    And Enter demographic data for dependent    1    Amanda    06/12/1999    Child    Female    No
+    And Click Link    Save & Continue
+    And Click Link    Select Browse
+    And Wait a Bit
+    And Switch to small view
+    And Change plan display on page to    24
+    And Click Add to Quote for plan    Classic $3,000 HDHP
+    And Click Add to Quote for plan    Classic $6,350
+    And Click Add to Quote for plan    Select $6,350
+    And Finalize Quote
+    And Add dental rider to plan    Low     Select $6,350
+    And Add dental rider to plan    Low     Classic $6,350
+    And Add dental rider to plan    High     Classic $3,000 HDHP
+    And Click Link    Save & Create Case
+    And Enter details in Create IFP Case page
+    And Wait Until Page Contains    Quote Summary
+    And Click Button    Generate Proposal
+    And Generate Proposal
+    And Send & verify Proposal    PDF
+    And Click Element    xpath=//a[contains(text(),'Quote Summary')]
+    And Wait a Bit
+    And Selects Plan By Name    Classic $3,000 HDHP
+    And Click Button    Apply
+    And Broker completes Prior To Applying page    Broker Complete Online
+    And Wait Until Page Contains    Application Checklist
+    And Wait a Bit
+    And Verify that selected plan is in Cart
+    And Click Link    Start Application
+    And Broker Enters Primary Applicant details, selects Coverage for     Myself
+    And Pass Family Members page
+    And Enter details in Prior Coverage page
+    And Enter details in Payment Options page
+    And Wait a Bit
+    And Pass Verify Application page
+    And Enter details in Submit Application on Behalf of Applicant page    shah    \    broker
+    Then Wait Confirmation page
+
+
+    
