@@ -9,7 +9,7 @@ Resource          ../shp_spg_keywords.txt
 *** TestCases ***
 
 Test Smoke test - Consumer completes shopping - Primary
-    [Documentation]    
+    [Documentation]    *IFP Shopping - Smoke Test: Consumer*
     ...
     ...    *User Type:* Consumer (Anonymous user)
     ...
@@ -111,7 +111,6 @@ Test Smoke test - Consumer completes shopping - Primary
 #    
     
 Consumer completes shopping - Primary, Spouse, 2 Children
-
     [Documentation]    
     ...
     ...    *User Type:* Consumer (Anonymous user)
@@ -348,7 +347,7 @@ Producer sends proposal and completes shopping - Child Only
     ...
     ...    *Applicant combination :* Primary
     ...
-    [Tags]    shopping    agent    draft
+    [Tags]    shopping    agent
     
     Given Shah Broker logs in to application
     When Selects IFP Quoting
@@ -385,7 +384,7 @@ Producer sends proposal and completes shopping - Child Only
     And Verify that selected plan is in Cart
     And Click Link    Start Application
     And Broker Enters Primary Applicant details, selects Coverage for     My Child
-    And Pass Family Members page
+    And Enter details in Family Members page    1
     And Enter details in Prior Coverage page
     And Enter details in Payment Options page
     And Wait a Bit
@@ -393,5 +392,40 @@ Producer sends proposal and completes shopping - Child Only
     And Enter details in Submit Application on Behalf of Applicant page    shah    \    broker
     Then Wait Confirmation page
 
-
+Sales starts application and forward it to consumer - Primary
+    [Documentation]    
+    ...
+    ...    *User Type:* Broker
+    ...
+    ...    *Applicant combination :* Primary
+    ...
+    [Tags]    shopping    agent    draft
     
+    Given Sales Represenative logs in to application
+    When Selects IFP Quoting
+    And Proceed to the Demographic page
+    And Enter demographic data for the primary applicant    54805    1    Octavia    07/23/1979    Female    No
+    And Click Link    Save & Continue
+    And Click Link    Select Browse
+    And Wait a Bit
+    And Switch to small view
+    And Change plan display on page to    12
+    And Click Add to Quote for plan    Classic $1,800-20%
+    And Click Add to Quote for plan    Classic $2,000-30%
+    And Click Add to Quote for plan    Classic $6,000 HDHP
+    And Finalize Quote
+    And Add dental rider to plan    Low     Classic $1,800-20%
+    And Add dental rider to plan    High     Classic $6,000 HDHP
+    And Click Link    Save & Create Case
+    And Enter details in Create IFP Case page
+    And Wait Until Page Contains    Quote Summary
+    And Selects Plan By Name    Classic $6,000 HDHP
+    And Click Button    Apply
+    And Broker completes Prior To Applying page    Broker Start Online
+    And Wait a Bit
+    And Wait Until Page Contains    Application Checklist
+    And Wait a Bit
+    And Verify that selected plan is in Cart
+    And Click Link    Start Application
+    And Broker Enters Primary Applicant details, selects Coverage for     Myself
+    And Forward application to consumer

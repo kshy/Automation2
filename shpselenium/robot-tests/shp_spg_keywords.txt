@@ -79,7 +79,6 @@ Initialize Variables
     ${consumerBirthDate}=    Set Variable    02141974
     ${email}=    Set Variable    tvolvk.test@gmail.com
     ${emailPwd}=    Set Variable    Secur1ty_Auto
-    ${isGuardian}=    Set Variable    0
     Set Test Variable    ${ifpCaseName}
     Set Test Variable    ${zipCode}
     Set Test Variable    ${randNbr}
@@ -105,7 +104,6 @@ Initialize Variables
     Set Test Variable    ${email}
     Set Test Variable    ${emailPwd}
     Set Test Variable    ${consumerBirthDate}
-    Set Test Variable    ${isGuardian}
 
 #Enter demographic data for the primary applicant
 #    [Arguments]    ${zip}    ${county_index}    ${fname}    ${date}    ${gender}    ${tobacco}
@@ -1138,6 +1136,16 @@ Shah Broker logs in to application
     Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Click Button    name=login.button
     Wait Until Page Contains    Welcome, shah broker!    ${SELENIUM_TIMEOUT}    Dashboard has not displayed
 
+Sales Represenative logs in to application
+    Click Link    Returning User Login
+    Wait Until Page Contains    Welcome    ${SELENIUM_TIMEOUT}    Welcome screen has not displayed
+    Input Text    name=username    sallysales
+    Input Text    name=password    password
+    Comment    Introduced sleep as per 6.1 maint application behaviour
+    Sleep    2s
+    Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Click Button    name=login.button
+    Wait Until Page Contains    Welcome, Internal User!    ${SELENIUM_TIMEOUT}    Dashboard has not displayed
+
 Selects IFP Case
     Wait Until Page Contains    Dashboard    ${SELENIUM_TIMEOUT}
     Execute Javascript    $('#activities').parent().showSuperfishUl()
@@ -1186,16 +1194,23 @@ Proceed to the Demographic page
 #    Page Should Contain    Thank You!
 #    Page Should Contain Link    Download Application    
 #    
-#Forward app to consumer
-#    Wait Until Page Contains Element    name=birthDate    ${SELENIUM_TIMEOUT}    Forward Application to Consumer screen wasn't displayed
-#    Input Text    name=birthDate    ${consumerBirthDate}
-#    Input Text    name=message    Application is ready to be sent
-#    Sleep    5
-##    Input Text    name=userProfile.user.emailAddress    ${email}
-#    Click Button    Email to Client
-#    Sleep    2
-#    Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Page Should Contain    Thank you for Sending an Application    
-#    
+Enter details in Forward app to consumer
+    Wait Until Page Contains Element    name=birthDate    ${SELENIUM_TIMEOUT}    Forward Application to Consumer screen wasn't displayed
+    Input Text    name=birthDate    ${consumerBirthDate}
+    Input Text    name=message    Application is ready to be sent
+    Sleep    5
+#    Input Text    name=userProfile.user.emailAddress    ${email}
+    Click Button    Email to Client
+    Sleep    2
+    Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Page Should Contain    Thank you for Sending an Application
+
+Forward application to consumer
+    Wait a Bit
+    Execute Javascript    $("[class='buttonForward']").click()
+    Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Page Should Contain    Are you sure you want to forward this application?
+    Click Element    xpath=//*[@id='popup_ok']
+    Enter details in Forward app to consumer
+
 #Customer Connects Gmail
 #    Go To    http://gmail.com/
 #    Wait Until Page Contains    Gmail    ${SELENIUM_TIMEOUT}    Gmail Home screen wasn't displayed
@@ -1313,7 +1328,7 @@ Pass through Checklist screen
 #    Execute Javascript    $("[class='buttonNext']").click()
 #
 Broker Enters Primary Applicant details, selects Coverage for
-    [Arguments]    ${coverageFor}
+    [Arguments]    ${coverageFor}='Myself'
     Wait Until Page Contains Element    Application.Coverage_For    ${SELENIUM_TIMEOUT}    Personal Information screen wasn't displayed
     Select From List    Application.Coverage_For    ${coverageFor}
     Execute Javascript    $("[name='Application.Applicant.Last_Name']").val('${userLName}')
@@ -1417,7 +1432,6 @@ Enter details in Submit Application on Behalf of Applicant page
     ${isDSdisplayed}=    Get Matching Xpath Count     //input[@name='Application.Dependent[0].Signature.Agreed_To_Terms']
 #    Run Keyword If    '${isApNdisplayed}'=='1'    Select Checkbox    name=Application.Signature.Incarcerated_Name
 #    Select Checkbox    Application.Signature.SBC_Provided
-#    Run Keyword If    '${isGuardian}'=='1'    ${fname}=    Set Variable    ${guardianFName}
     Select Checkbox    xpath=//input[@name='Application.Signature.Agreed_To_Terms' and not(@disabled)]
     Input Text    xpath=//input[@name='Application.Signature.First_Name' and not(@disabled)]    ${fname}
     Input Text    xpath=//input[@name='Application.Signature.Middle_Initial' and not(@disabled)]    ${mname}
@@ -1548,7 +1562,7 @@ Enter Legal Guardian Info and update Coverage selection
     Input Text    Application.Applicant.Guardian.City    Phila
     Select From List    Application.Applicant.Guardian.State    WI
     Input Text    Application.Applicant.Guardian.Zip    54514
-    Set Global Variable     ${isGuardian}    1
+    Set Global Variable    ${userFName}    ${guardianFName}
 #    Input Text    Application.Applicant.First_Name    ${child1FName}
 #    Input Text    Application.Applicant.Last_Name    ${child1LName}
 #    Input Text    Application.Applicant.Dob    09082007

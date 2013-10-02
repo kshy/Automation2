@@ -503,7 +503,7 @@ Test Smoke test Enrollment - Employer
     ...    *User Type:* Employer
     ...
     [Tags]    draft
-    Given Sales Representer logs in to application
+    Given Sales Represenative logs in to application
     When Selects SG Case
     And Wait a Bit
     And Enter details in Create Small Group Case page

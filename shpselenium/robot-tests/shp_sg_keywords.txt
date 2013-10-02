@@ -874,6 +874,17 @@ Sales Manager logs in to application
     Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Click Button    name=login.button
     Wait Until Page Contains    Welcome, Martin Salesmanager!    ${SELENIUM_TIMEOUT}    Dashboard has not displayed
 
+Sales Represenative logs in to application
+    Click Link    Returning User Login
+    Wait Until Page Contains    Welcome    ${SELENIUM_TIMEOUT}    Welcome screen has not displayed
+    Input Text    name=username    sallysales
+    Input Text    name=password    password
+    Comment    Introduced sleep as per 6.1 maint application behaviour
+    Sleep    2s
+    Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Click Button    name=login.button
+    Wait Until Page Contains    Welcome, Internal User!    ${SELENIUM_TIMEOUT}    Dashboard has not displayed
+
+
 Selects SG Case
     Wait Until Page Contains    Dashboard    ${SELENIUM_TIMEOUT}
     Execute Javascript    $('#activities').parent().showSuperfishUl()
