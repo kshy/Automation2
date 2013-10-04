@@ -499,6 +499,9 @@ Check that Recommendations page is opened
 Check that See & Compare plans page is opened
     Wait Until Page Contains    See & Compare    ${SELENIUM_TIMEOUT}
     
+Wait Until ${pagename} page is opened
+    Wait Until Keyword Succeeds    30    5    Page Should Contain    ${pagename}
+    
 #################### Subsidy keywords ############################
 #
 #Return to subsidy check page
@@ -1204,70 +1207,93 @@ Enter details in Forward app to consumer
     Sleep    2
     Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Page Should Contain    Thank you for Sending an Application
 
-Forward application to consumer
-    Wait a Bit
-    Execute Javascript    $("[class='buttonForward']").click()
-    Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Page Should Contain    Are you sure you want to forward this application?
-    Click Element    xpath=//*[@id='popup_ok']
-    Enter details in Forward app to consumer
+Enter details in Forward app to agent
+    Wait Until Page Contains Element    name=message    ${SELENIUM_TIMEOUT}    Forward Application to Consumer screen wasn't displayed
+    Input Text    name=message    Application is ready to be sent
+    Sleep    5
+    Click Button    Forward Application
+    Sleep    2
+#    Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Page Should Contain    Thank you for Sending an Application
 
-#Customer Connects Gmail
-#    Go To    http://gmail.com/
-#    Wait Until Page Contains    Gmail    ${SELENIUM_TIMEOUT}    Gmail Home screen wasn't displayed
-#    ${retElem}=    Run Keyword And Ignore Error    Element Should Not Be Visible    name=Email
-#    Run Keyword If    '${retElem[0]}'=='FAIL'    Login Gmail
-#    Run Keyword Unless    '${retElem[0]}'=='FAIL'    Wait Until Keyword Succeeds    120s    2s    Page Should Contain    Inbox
-#    
-#Login Gmail
-#    Input Text    name=Email    ${email}
-#    Input Text    name=Passwd    ${emailPwd}
-#    Click Button    name=signIn
-#    Wait Until Keyword Succeeds    120s    2s    Page Should Contain    Inbox
-#    
-#
-#User opens email invitation message
-#    ${curTime}=    Get Time    epoch
-#    ${deadLine}=    Evaluate    ${curTime}+${EMAIL_TIMEOUT}
-#    :FOR    ${index}    IN RANGE    1000
-#    \    ${count}=    Get Matching Xpath Count    //span[contains(.,'Dear ${userFName}')]
-#    \    ${elapse}=        Get Time    epoch
-#    \    Run Keyword If     ${count}>0    Exit For Loop    
-#    \    Run Keyword If    ${elapse}>${deadLine}    Exit For Loop
-#    \    Sleep    20
-#    \    Wait Until Page Contains Element    xpath=//a[contains(text(),'Inbox')]    5
-#    \    Click Element    xpath=//a[contains(text(),'Inbox')]
-#    Run Keyword If    ${count}>0    Click Element    xpath=//span[contains(.,'Dear ${userFName}')]
-#    Run Keyword If    ${elapse}>${deadLine}    Fail    Email was not recieved in ${EMAIL_TIMEOUT} seconds.    
-#
-#User verifies email content of gmail and proceed for registration
-#    Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Page Should Contain    Dear ${userFName},
-##    log    ${appID}    WARN
-##    Page Should Contain    RE: Application ${appID}
-#    Page Should Contain    would like you to complete an online application.
-#    Page Should Contain    Application is ready to be sent
-#    Page Should Contain    Please log on to view, complete and submit your application within 30 days or it will expire. 
-#    Page Should Contain    If the application expires, you will need to start a new application or have 
-#    Page Should Contain    If you have questions about your application, contact your agent at 
-#    Page Should Contain    Please do not reply to this email. Thank you for your interest.
-#    Page Should Contain    Sincerely,
-#    Page Should Contain    Bob Broker
-#    Click Link   log on
+Forward application to ${userRole}
+    #${userRole}    consumer    agent
+    Sleep    5
+    Execute Javascript    $("[class='buttonForward']").click()
+    Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    3s    Page Should Contain    Are you sure you want to forward this application?
+    Click Element    xpath=//*[@id='popup_ok']
+    Enter details in Forward app to ${userRole}
+    
+
+Customer opens email and registers
+    Wait a Bit
+    Customer Connects Gmail
+    Wait a Bit
+    ${islogin}=    Get Matching Xpath Count    xpath=//a[contains(text(),'Inbox')]
+    Run Keyword If    '${islogin}'=='0'    Login Gmail
+    User opens email invitation message
+    User verifies email content of gmail and proceed for registration
+    Enter detail in Consumer Registration
+
+Customer Connects Gmail
+    Go To    http://gmail.com/
+    Wait Until Page Contains    Gmail    ${SELENIUM_TIMEOUT}    Gmail Home screen wasn't displayed
+    ${retElem}=    Run Keyword And Ignore Error    Element Should Not Be Visible    name=Email
+    Run Keyword If    '${retElem[0]}'=='FAIL'    Login Gmail
+    Run Keyword Unless    '${retElem[0]}'=='FAIL'    Wait Until Keyword Succeeds    120s    2s    Page Should Contain    Inbox
+    
+Login Gmail
+    Input Text    name=Email    ${email}
+    Input Text    name=Passwd    ${emailPwd}
+    Click Button    name=signIn
+    Wait Until Keyword Succeeds    120s    2s    Page Should Contain    Inbox
+    
+
+User opens email invitation message
+    Wait a Bit
+    ${EMAIL_TIMEOUT}=    Set Variable    1000
+    ${curTime}=    Get Time    epoch
+    ${deadLine}=    Evaluate    ${curTime}+${EMAIL_TIMEOUT}
+    :FOR    ${index}    IN RANGE    100
+    \    ${count}=    Get Matching Xpath Count    //span[contains(.,'${userFName} ${userLName}')]
+    \    ${elapse}=        Get Time    epoch
+    \    Run Keyword If     ${count}>0    Exit For Loop    
+    \    Run Keyword If    ${elapse}>${deadLine}    Exit For Loop
+    \    Sleep    20
+    \    Wait Until Page Contains Element    xpath=//a[contains(text(),'Inbox')]    5
+    \    Click Element    xpath=//a[contains(text(),'Inbox')]
+    Run Keyword If    ${count}>0    Click Element    xpath=//span[contains(.,'${userFName} ${userLName}')]
+    Run Keyword If    ${elapse}>${deadLine}    Fail    Email was not recieved in ${EMAIL_TIMEOUT} seconds.    
+
+User verifies email content of gmail and proceed for registration
+    Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Page Should Contain    Dear ${userFName} ${userLName},
+#    log    ${appID}    WARN
+#    Page Should Contain    RE: Application ${appID}
+    Page Should Contain    from Security Health Plan
+    Page Should Contain    would like you to complete an online application.
+    Page Should Contain    Application is ready to be sent
+    Page Should Contain    Please log on to view, complete and submit your application within 60 days or it will expire. 
+    Page Should Contain    If the application expires, you will need to start a new application or have 
+    Page Should Contain    If you have questions about your application, contact your agent at 
+    Page Should Contain    Please do not reply to this email. Thank you for your interest.
+    Page Should Contain    Sincerely,
+    Click Link   log on
 #    Close Window
-#    Sleep    5
-#    Select Window    title=InsureAdvantage - Consumer Registration
-#    
-#Enter detail in Consumer Registration
-#    Wait Until Page Contains    Consumer Registration    ${SELENIUM_TIMEOUT}    Consumer Registration screen wasn't displayed
-#    Input Text    lastName    ${userLName}
-#    Input Text    dateOfBirth    ${consumerBirthDate}
-#    Click Element    xpath=//button[contains(text(),'Continue')]
-#    
-#Proceed From My Account
-#    Wait Until Page Contains    My Account    ${SELENIUM_TIMEOUT}    My Account screen wasn't displayed
-#    Sleep    3
-#    Click Element    xpath = //button[contains(text(),'Complete')]
-#
-#    
+    Sleep    5
+    Select Window    title=Security Health Plan - Consumer Registration
+
+Enter detail in Consumer Registration
+    Wait Until Page Contains    Consumer Registration    ${SELENIUM_TIMEOUT}    Consumer Registration screen wasn't displayed
+    Input Text    lastName    ${userLName}
+    Input Text    dateOfBirth    ${consumerBirthDate}
+    Click Element    xpath=//button[contains(text(),'Continue')]
+
+Proceed From My Account
+    Wait Until Page Contains    My Account    ${SELENIUM_TIMEOUT}    My Account screen wasn't displayed
+    Sleep    3
+    Click Element    xpath = //button[contains(text(),'Complete')]
+    Wait a Bit
+
+    
 ################### Prior to applying Keywords ###############    
 #
 #Check fields pre-populated from shopping on Prior to applying screen
@@ -1276,7 +1302,7 @@ Forward application to consumer
 #    Page Should Contain Element    xpath=//input[(@id="priorToApplyingForm_priorToApplyingInfo_userProfile_address_zip") and (@value="${zipCode}")]
 #
 Enter details in Prior To Applying page as consumer
-    [Arguments]    ${method}    ${agent}
+    [Arguments]    ${method}=Online    ${agent}=No
     Wait Until Page Contains Element    name=priorToApplyingInfo.userProfile.user.lastName
     Sleep    5
     Input Text    priorToApplyingInfo.userProfile.user.firstName    ${userFName}
@@ -1285,7 +1311,7 @@ Enter details in Prior To Applying page as consumer
     Input Text    priorToApplyingInfo.userProfile.address.city    Des Moines
     Input Text    priorToApplyingForm_priorToApplyingInfo_userProfile_user_emailAddress    ${email}
     Select From List    priorToApplyingForm_priorToApplyingInfo_userProfile_preferredContactMethod    Email
-    Select From List    priorToApplyingForm_priorToApplyingInfo_userProfile_bestContactTime    Morning
+    Select From List    priorToApplyingForm_priorToApplyingInfo_userProfile_bestContactTime    Afternoon
     Input Text    priorToApplyingInfo.registrationInfo.userId    consumer${randNbr}
     Input Text    priorToApplyingInfo.registrationInfo.password    password1
     #${randNbr}
@@ -1293,12 +1319,16 @@ Enter details in Prior To Applying page as consumer
     #${randNbr}
     Select From List By Index    priorToApplyingInfo.registrationInfo.secretQuestion    3
     Input Text    priorToApplyingInfo.registrationInfo.secretAnswer    porsche
+    ${otherinfo}=    Get Matching Xpath Count    xpath=//*[@name='priorToApplyingInfo.submissionMethod']
+    Run Keyword Unless    '${otherinfo}'=='0'    Enter details for Submission method and work with agent
+    Click Link    Continue
+
+Enter details for Submission method and work with agent
     Run Keyword If    '${method}'=='Online'    Click Element    priorToApplyingInfo.submissionMethod
     Run Keyword If    '${method}'=='Paper'    Click Element    priorToApplyingInfo.submissionMethod
     Run Keyword If    '${agent}'=='Yes'    Select Radio Button    priorToApplyingInfo.userProfile.workingWithAnAgent    Y
     Run Keyword If    '${agent}'=='No'    Select Radio Button    priorToApplyingInfo.userProfile.workingWithAnAgent    N
-    Click Link    Continue
-    
+
 Broker completes Prior To Applying page
     [Arguments]    ${method}
     Wait Until Page Contains Element    userLastName
@@ -1562,7 +1592,7 @@ Enter Legal Guardian Info and update Coverage selection
     Input Text    Application.Applicant.Guardian.City    Phila
     Select From List    Application.Applicant.Guardian.State    WI
     Input Text    Application.Applicant.Guardian.Zip    54514
-    Set Global Variable    ${userFName}    ${guardianFName}
+#    Set Global Variable    ${userFName}    ${guardianFName}
 #    Input Text    Application.Applicant.First_Name    ${child1FName}
 #    Input Text    Application.Applicant.Last_Name    ${child1LName}
 #    Input Text    Application.Applicant.Dob    09082007

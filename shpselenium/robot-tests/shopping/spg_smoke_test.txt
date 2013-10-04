@@ -36,7 +36,7 @@ Test Smoke test - Consumer completes shopping - Primary
     
     #Application
     And Enter details in Prior To Applying page as consumer    Online    No
-    And Wait Until Page Contains    Application Checklist
+    And Wait Until Application Checklist page is opened
     And Wait a Bit
     And Verify that selected plan is in Cart
     And Click Link    Start Application
@@ -144,7 +144,7 @@ Consumer completes shopping - Primary, Spouse, 2 Children
     
     #Application
     And Enter details in Prior To Applying page as consumer    Online    No
-    And Wait Until Page Contains    Application Checklist
+    And Wait Until Application Checklist page is opened
     And Wait a Bit
     And Verify that selected plan is in Cart
     And Click Link    Start Application
@@ -184,7 +184,7 @@ Consumer completes shopping - Child Only
     And Click Link    Enroll Now
     #Application
     And Enter details in Prior To Applying page as consumer    Online    No
-    And Wait Until Page Contains    Application Checklist
+    And Wait Until Application Checklist page is opened
     And Wait a Bit
     And Verify that selected plan is in Cart
     And Click Link    Start Application
@@ -211,7 +211,7 @@ Test Smoke test - Producer sends proposal and completes shopping - Primary
     Given Shah Broker logs in to application
     When Selects IFP Case
     And Enter details in Create IFP Case page   Albert    53910
-    And Wait Until Page Contains    Case Summary - Individual
+    And Wait Until Case Summary - Individual page is opened
     And Click Link    New Business
     And Start Quote
     And Proceed to the Demographic page
@@ -228,7 +228,7 @@ Test Smoke test - Producer sends proposal and completes shopping - Primary
     And Add dental rider to plan    Low     Classic $1,000-20%
     And Add dental rider to plan    High     Classic $5,500 HDHP
     And Click Link    Save & Create Case
-    And Wait Until Page Contains    Quote Summary
+    And Wait Until Quote Summary page is opened
     And Click Button    Generate Proposal
     And Generate Proposal
     And Send & verify Proposal    PDF
@@ -237,7 +237,7 @@ Test Smoke test - Producer sends proposal and completes shopping - Primary
     And Selects Plan By Name    Classic $5,500 HDHP
     And Click Button    Apply
     And Broker completes Prior To Applying page    Broker Complete Online
-    And Wait Until Page Contains    Application Checklist
+    And Wait Until Application Checklist page is opened
     And Wait a Bit
     And Verify that selected plan is in Cart
     And Click Link    Start Application
@@ -262,7 +262,7 @@ Producer completes shopping - Primary
     Given Shah Broker logs in to application
     When Selects IFP Case
     And Enter details in Create IFP Case page   Norman    53910
-    And Wait Until Page Contains    Case Summary - Individual
+    And Wait Until Case Summary - Individual page is opened
     And Click Link    New Business
     And Start Quote
     Proceed to the Demographic page
@@ -281,7 +281,7 @@ Producer completes shopping - Primary
     And Click Dental to plan    Low
     And Click Link    Enroll Now
     And Broker completes Prior To Applying page    Broker Complete Online
-    And Wait Until Page Contains    Application Checklist
+    And Wait Until Application Checklist page is opened
     And Wait a Bit
     And Click Link    Start Application
     And Broker Enters Primary Applicant details, selects Coverage for     Myself
@@ -327,7 +327,7 @@ Producer completes shopping - Family of 4
     
     #Application
     And Broker completes Prior To Applying page    Broker Complete Online
-    And Wait Until Page Contains    Application Checklist
+    And Wait Until Application Checklist page is opened
     And Wait a Bit
     And Verify that selected plan is in Cart
     And Click Link    Start Application
@@ -369,7 +369,7 @@ Producer sends proposal and completes shopping - Child Only
     And Add dental rider to plan    High     Classic $3,000 HDHP
     And Click Link    Save & Create Case
     And Enter details in Create IFP Case page
-    And Wait Until Page Contains    Quote Summary
+    And Wait Until Quote Summary page is opened
     And Click Button    Generate Proposal
     And Generate Proposal
     And Send & verify Proposal    PDF
@@ -379,7 +379,7 @@ Producer sends proposal and completes shopping - Child Only
     And Click Button    Apply
     And Broker completes Prior To Applying page    Broker Complete Online
     And Wait a Bit
-    And Wait Until Page Contains    Application Checklist
+    And Wait Until Application Checklist page is opened
     And Wait a Bit
     And Verify that selected plan is in Cart
     And Click Link    Start Application
@@ -404,7 +404,7 @@ Sales starts application and forward it to consumer - Primary
     Given Sales Represenative logs in to application
     When Selects IFP Quoting
     And Proceed to the Demographic page
-    And Enter demographic data for the primary applicant    54805    1    Octavia    07/23/1979    Female    No
+    And Enter demographic data for the primary applicant    53910    1    Barbara    04/29/1972    Female    No
     And Click Link    Save & Continue
     And Click Link    Select Browse
     And Wait a Bit
@@ -418,14 +418,21 @@ Sales starts application and forward it to consumer - Primary
     And Add dental rider to plan    High     Classic $6,000 HDHP
     And Click Link    Save & Create Case
     And Enter details in Create IFP Case page
-    And Wait Until Page Contains    Quote Summary
+    And Wait Until Quote Summary page is opened
     And Selects Plan By Name    Classic $6,000 HDHP
     And Click Button    Apply
     And Broker completes Prior To Applying page    Broker Start Online
     And Wait a Bit
-    And Wait Until Page Contains    Application Checklist
-    And Wait a Bit
+    And Wait Until Application Checklist page is opened
     And Verify that selected plan is in Cart
     And Click Link    Start Application
     And Broker Enters Primary Applicant details, selects Coverage for     Myself
     And Forward application to consumer
+    And Customer opens email and registers
+    And Enter details in Prior To Applying page as consumer
+    And Proceed From My Account
+    And Pass Family Members page
+    And Pass Primary Care Provider page
+    And Enter details in Prior Coverage page
+    And Enter details in Payment Options page
+    And Forward Application to agent
