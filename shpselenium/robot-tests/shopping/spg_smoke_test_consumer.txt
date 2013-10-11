@@ -1,0 +1,198 @@
+*** Settings ***
+Suite Setup       Setup
+Suite Teardown    Teardown
+#Test Setup        Initialize Variables
+Test Setup        Setup of Test
+Test Teardown     Teardown of Test
+Resource          ../shp_spg_keywords.txt
+
+*** TestCases ***
+
+Test Smoke test - Consumer completes shopping - Primary
+    [Documentation]    *IFP Shopping - Smoke Test: Consumer*
+    ...
+    ...    *User Type:* Consumer (Anonymous user)
+    ...
+    ...    *Applicant combination :* Primary
+    ...
+    [Tags]    shopping    smoke     short    consumer
+    
+    Given Anonymous User click Find Plan and proceed to Welcome page
+    When Proceed to the Demographic page
+    And Enter demographic data for the primary applicant    53910    1    Leonard    12/15/1972    Male    Yes
+    And Click Link    Save & Continue
+    And Wait Until Keyword Succeeds    60    5    Page Should Contain    How do you want to shop for plans?
+    And Click Link    Select Browse
+    And Wait a Bit
+    And Switch to small view
+    And Click Add to Cart for plan    Classic $1,800-20%
+    And Wait Until Page Contains    1 Plan Added to Cart
+    And Wait a Bit
+    And Click Link    View Cart & Enroll
+    And Wait Until Page Contains    Items In Your Cart
+    And Wait a Bit
+    And Click Link    Enroll Now
+    
+    #Application
+    And Enter details in Prior To Applying page as consumer    Online    No
+    And Wait Until Application Checklist page is opened
+    And Verify that selected plan is in Cart
+    And Click Link    Start Application
+    And Enter Primary Applicant details - Consumer    Myself
+    And Pass Family Members page
+    And Pass Primary Care Provider page
+    And Enter details in Prior Coverage page
+    And Enter details in Payment Options page
+    And Pass Verify Application page
+    And Pass Authorized Representative page
+    And Enter details in Submit Application on Behalf of Applicant page
+    Then Wait Confirmation page
+    
+    
+Consumer completes shopping - Primary, Spouse, 2 Children
+    [Documentation]    
+    ...
+    ...    *User Type:* Consumer (Anonymous user)
+    ...
+    ...    *Applicant combination :* Primary, Spouse, 2 children
+    ...
+    [Tags]    shopping    smoke    consumer
+    
+    Given Anonymous User click Find Plan and proceed to Welcome page
+    When Proceed to the Demographic page
+    And Enter demographic data for the primary applicant    53910    1    Brandan    12/15/1972    Male    Yes
+    Click Link    Add Dependent
+    And Enter demographic data for dependent    1    Veronica    11/17/1998    Spouse    Female    No
+    Click Link    Add Dependent
+    And Enter demographic data for dependent    2    Lily    08/31/2013    Child    Female    No
+    Click Link    Add Dependent
+    And Enter demographic data for dependent    3    Robert    09/01/2009    Child    Male    No
+    And Click Link    Save & Continue
+    And Wait Until Keyword Succeeds    60    5    Page Should Contain    How do you want to shop for plans?
+    And Click Link    Select Browse
+    And Wait a Bit
+    And Switch to small view
+    And Click Add to Cart for plan    Classic $5,500 HDHP
+    And Wait Until Page Contains    1 Plan Added to Cart
+    And Wait a Bit
+    And Click Link    View Cart & Enroll
+    And Wait Until Page Contains    Items In Your Cart
+    And Add dental rider to plan    Low     Classic $5,500 HDHP
+    And Wait a Bit
+    And Click Link    Enroll Now
+    
+    #Application
+    And Enter details in Prior To Applying page as consumer    Online    No
+    And Wait Until Application Checklist page is opened
+    And Wait a Bit
+    And Verify that selected plan is in Cart
+    And Click Link    Start Application
+    And Enter Primary Applicant details - Consumer    My Family
+    And Enter details in Family Members page   3
+    And Enter details in Prior Coverage page
+    And Enter details in Payment Options page
+    And Pass Verify Application page
+    And Pass Authorized Representative page
+    And Enter details in Submit Application on Behalf of Applicant page
+    Then Wait Confirmation page
+
+Consumer completes shopping - Child Only
+    [Documentation]    
+    ...
+    ...    *User Type:* Consumer (Anonymous user)
+    ...
+    ...    *Applicant combination :* Child Only
+    ...
+    [Tags]    shopping    smoke     long    consumer
+    
+    Given Anonymous User click Find Plan and proceed to Welcome page
+    When Proceed to the Demographic page
+    And Enter demographic data for the primary applicant    54805    1    Josephine    03/20/2011    Female    No
+    And Click Link    Save & Continue
+    And Wait Until Keyword Succeeds    60    5    Page Should Contain    How do you want to shop for plans?
+    And Click Link    Select Browse
+    And Wait a Bit
+    And Switch to small view
+    And Click Add to Cart for plan    Classic $3,000 HDHP
+    And Wait Until Page Contains    1 Plan Added to Cart
+    And Wait a Bit
+    And Click Link    View Cart & Enroll
+    And Wait Until Page Contains    Items In Your Cart
+    And Add dental rider to plan    High     Classic $3,000 HDHP
+    And Wait a Bit
+    And Click Link    Enroll Now
+    #Application
+    And Enter details in Prior To Applying page as consumer    Online    No
+    And Wait Until Application Checklist page is opened
+    And Wait a Bit
+    And Verify that selected plan is in Cart
+    And Click Link    Start Application
+    And Enter Primary Applicant details - Consumer    My Child
+    And Pass Family Members page
+#    And Pass Primary Care Provider page
+    And Enter details in Prior Coverage page
+    And Enter details in Payment Options page
+#    And Enter details in Employer Payment Arrangements page
+    And Pass Verify Application page
+    And Pass Authorized Representative page
+    And Enter details in Submit Application on Behalf of Applicant page
+    Then Wait Confirmation page
+
+#Consumer completes shopping - Primary
+#
+#    [Documentation]    
+#    ...
+#    ...    *User Type:* Consumer (Anonymous user)
+#    ...
+#    ...    *Applicant combination :* Primary
+#    ...
+#    Given Anonymous User click Find Plan and proceed to Welcome page
+#    When Click Link    Get Started
+#    And Click Link    Skip & Shop Plans
+#    And Enter demographic data for the primary applicant    53910    1    Leonard    12/15/1972    Male    Yes
+#    And Click Link    Save & Continue
+#    And Wait Until Page Contains    How do you want to shop for plans?
+#    
+#    #Helping quiz
+#    And Click Link    Select Guide Me
+##    And Select my costs radio button    Has a lower out-of-pocket cost when I use services and a higher monthly premium
+#    Wait Until Page Contains    Which best describes the amount you are willing to pay each month (premium) for health insurance?
+##    And Click Continue button
+#    And Click Link     Save & Continue
+#    And Wait Until Page Contains    How high of a deductible are you willing to pay before your insurance starts to kick in?
+#    And Click Link     Save & Continue
+#    And Select Co-insurance radio button    Yes
+#    And Click Link     Save & Continue
+#    And Select HSA radio button    Yes
+#    And Click Link     Save & Continue
+#    And Select Usage of Prescription Drugs    On occasion
+#    And Click Continue button
+#    And Select Office Visits frequency     Three times or less
+#    And Click Continue button
+#    And Select Network Access frequency    Very rarely, emergencies only
+#    And Click Continue button
+#    #And Click Find a Doctor button
+#    #And Enter details in Find A Doctor popup    50545
+#    And Wait a Bit
+#    And Click Continue button
+#    And Select Health status    Moderately Healthy
+#    And Click Continue button
+#    Then Page Should Contain    Your Summary
+#    And Click Link    Close & View Your Plans
+#    Then Check that See & Compare plans page is opened
+#    And Switch to small view
+#    ############################################################################
+#    And Select plan(s) small view    3
+#    And Compare plans
+#    And Verify selected plans are displayed
+#    And Delete plan    1
+#    And Switch to full view
+#    And Switch to large view
+#    And Add plan to cart    1
+#    Then Check that added plan is displayed in the cart
+#    And Close cart
+#    And Replace plan    2
+#    Then Check that replaced plan is displayed in the cart
+#    Click Link    View Cart & Enroll
+#    Click Link    Enroll Now
+#    

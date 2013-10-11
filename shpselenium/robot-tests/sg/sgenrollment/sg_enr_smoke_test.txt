@@ -20,8 +20,7 @@ Test Smoke test Enrollment from case - Broker
     And Wait a Bit
     And Enter details in Create Small Group Case page
     And Wait Until Page Contains    Case Summary - Small Group
-    And Click Link    New Business
-    And Click Button    Start Enrollment
+    And Starts SG Enrollment from a case
 
     
     #Employer Enrollment
@@ -30,14 +29,15 @@ Test Smoke test Enrollment from case - Broker
     And Select type in Apply Options page    online
     And Enter details in Employer Representative page
     And Enter details in Start Employer Enrollment page     Bob    B    Broker
-    And Wait a Bit
     
     #Update Plan Offering
-    And Click Button    Update Plan Offering
+    And Start Update Plan Offering
     And Pass Plan Offering Options page
     And Select Plan By Name    Tradition $500-10% PLATINUM
     And Select Plan By Name    Independence $1,000-20% GOLD
     And Select Plan By Name    Independence $2,000-10% HDHP SILVER
+    And Select Dental Rider For Plan    Independence $2,000-10% HDHP SILVER    Low
+    And Select Dental Rider For Plan    Independence $1,000-20% GOLD    High
     And Click Button    Add Plans
     And Click Button    Continue
     And Select Plan Election for Employee    1    Tradition $500-10% PLATINUM
@@ -45,29 +45,22 @@ Test Smoke test Enrollment from case - Broker
     And Click Button    Done
     
     #Employer Application
-    And Click Button    Complete Application
+    And Start Employer application
     And Enter details in Small Employer Disclosure    Bob    B    Broker
-#    And Enter details in Employer Information page
     And Enter details in General page
-#    And Enter details in Employer Contribution(s)
-#    And Enter details in Eligibility Requirements page
     And Enter details in Eligibility page    2
     And Enter details in Continuation/Disability page
     And Enter details in Health Plan Information
     And Enter details in HRA Contribution page
 #HSA Contribution page should appear only if HDHP plan was selected
     And Enter details in HSA Contribution page
-#    And Enter details in Current Carrier page
     And Enter details in Current Coverage page
-    And Sleep    10
     And Pass Application Summary page
-#    And Enter details in Signature page    Bob    B    Broker
     And Enter details in Employer's Statement page
     And Enter details in Certification page    Bob    B    Broker
-    And Wait a Bit
     And Pass Employer Submission Confirmation page
-    #Start Employee Enrollment Process    
-    And Click Button    Start Enrollment
+    #Start Employee Enrollment Process
+    And Start Employee Enrollment
     And Pass Verify Census page
     And Pass Start Employee Enrollment page
     
@@ -130,7 +123,7 @@ Test Smoke test Enrollment from case - Broker
     And Open enrollment after search
     
     #Start Acceptance
-    And Click Button    Start Acceptance
+    And Start Employer Acceptance
     And Unselect Plan By Name    Tradition $500-10% PLATINUM
     And Unselect Plan By Name    Independence $2,000-10% HDHP SILVER
     And Click Button     Continue
@@ -139,7 +132,7 @@ Test Smoke test Enrollment from case - Broker
     And Click Button    Close
     
     #View Employee Elections
-    Click Button    View Elections
+    And Start Employee Election
     And Select Final Plan for Employee    1    Independence $1,000-20% GOLD
     And Select Final Plan for Employee    2    Independence $1,000-20% GOLD
     And Click Button    Finalize Employee Elections
@@ -163,14 +156,15 @@ Test Smoke test Enrollment - Broker
     And Select type in Apply Options page    paper
 #    And Enter details in Employer Representative page
     And Enter details in Start Employer Enrollment page     Bob    B    Broker
-    And Wait a Bit
-    
+
     #Update Plan Offering
-    And Click Button    Update Plan Offering
+    And Start Update Plan Offering
     And Pass Plan Offering Options page
     And Select Plan By Name    Tradition $500-10% PLATINUM
     And Select Plan By Name    Independence $1,000-20% GOLD
     And Select Plan By Name    Independence $2,000-10% HDHP SILVER
+    And Select Dental Rider For Plan    Tradition $500-10% PLATINUM    Low
+    And Select Dental Rider For Plan    Independence $2,000-10% HDHP SILVER    High
     And Click Button    Add Plans
     And Click Button    Continue
     And Select Plan Election for Employee    1    Tradition $500-10% PLATINUM
@@ -178,28 +172,23 @@ Test Smoke test Enrollment - Broker
     And Click Button    Done
     
     #Employer Application
-    And Click Button    Complete Application
+    And Start Employer application
     And Enter details in Small Employer Disclosure    Bob    B    Broker
-#    And Enter details in Employer Information page
     And Enter details in General page
-#    And Enter details in Employer Contribution(s)
-#    And Enter details in Eligibility Requirements page
     And Enter details in Eligibility page    2
     And Enter details in Continuation/Disability page
     And Enter details in Health Plan Information
     And Enter details in HRA Contribution page
 #HSA Contribution page should appear only if HDHP plan was selected
     And Enter details in HSA Contribution page
-#    And Enter details in Current Carrier page
     And Enter details in Current Coverage page
     And Pass Application Summary page
-#    And Enter details in Signature page    Bob    B    Broker
     And Enter details in Employer's Statement page
     And Enter details in Certification page    Bob    B    Broker
     And Wait a Bit
     And Pass Employer Submission Confirmation page
     #Start Employee Enrollment Process    
-    And Click Button    Start Enrollment
+    And Start Employee Enrollment
     And Pass Verify Census page
     And Pass Start Employee Enrollment page
     
@@ -276,7 +265,7 @@ Test Smoke test Enrollment - Broker
     
     
     #Start Acceptance
-    And Click Button    Start Acceptance
+    And Start Employer Acceptance
     And Unselect Plan By Name    Independence $1,000-20% GOLD
     And Click Button     Continue
     And Enter details in Acceptance options page    paper
@@ -290,7 +279,7 @@ Test Smoke test Enrollment - Broker
     And Wait a Bit
     
     #View Employee Elections
-    Click Button    View Elections
+    And Start Employee Election
     And Select Final Plan for Employee    1    Independence $2,000-10% HDHP SILVER
     And Select Final Plan for Employee    2    Independence $2,000-10% HDHP SILVER
     And Click Button    Finalize Employee Elections

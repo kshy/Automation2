@@ -8,8 +8,8 @@ Set currenttime=%Time::=-%
 Set currenttime=%currenttime:.=-%
 
 echo on
-python -m robot.run -A ff_args.txt --test "Test Agent SHOP Flow - Select Shop Plans And Browse All Plans" --loglevel TRACE --outputdir "Reports\shopping\impts" robot-tests\shopping
-::python -m robot.run -A local_args.txt --test "Test Smoke test Enrollment - Broker" --loglevel TRACE --outputdir "Reports" robot-tests\sg\sgenrollment
+::python -m robot.run -A ff_args.txt --test "Test Agent SHOP Flow - Select Shop Plans And Browse All Plans" --loglevel TRACE --outputdir "Reports\shopping\impts" robot-tests\shopping
+python -m robot.run -A local_args.txt --test "Test Smoke test Quote from case - Broker" --loglevel TRACE --outputdir "Reports\stg\qt" robot-tests\sg
 ::python -m robot.run -A local_args.txt --test "Test Smoke test - Producer completes shopping - Primary" --loglevel TRACE --outputdir "Reports\shopping" robot-tests\shopping
 ::python -m robot.run -A local_args.txt --test "Test Smoke test - Consumer completes shopping - Primary" --loglevel TRACE --outputdir "Reports\shopping" robot-tests\shopping
 ::python -m robot.run -A local_args.txt --test "Test Smoke test - Producer completes shopping - Primary" --loglevel TRACE --outputdir "Reports\shopping\broker" robot-tests\shopping

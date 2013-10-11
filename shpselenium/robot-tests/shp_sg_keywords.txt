@@ -133,8 +133,29 @@ UW Set Owner Assignment
 #    Input Text    name=Enrollment.Employer.Executive_Contact.Title    Mr
 #    Click Link    Next
 #    
+Start Update Plan Offering
+    Wait Until Keyword Succeeds    30    5    Page Should Contain    Enrollment Summary    Enrollment Summary page has not been displayed
+    Wait Until Keyword Succeeds    30    5    Click Button    Update Plan Offering
+
+Start Employer application
+    Wait Until Keyword Succeeds    30    5    Page Should Contain    Enrollment Summary    Enrollment Summary page has not been displayed
+    Wait Until Keyword Succeeds    30    5    Click Button    Complete Application
+
+Start Employee Enrollment
+    Wait Until Keyword Succeeds    30    5    Page Should Contain    Enrollment Summary    Enrollment Summary page has not been displayed
+    Wait Until Keyword Succeeds    30    5    Click Button    Start Enrollment
+
+Start Employer Acceptance
+    Wait Until Keyword Succeeds    30    5    Page Should Contain    Enrollment Summary    Enrollment Summary page has not been displayed
+    Wait Until Keyword Succeeds    30    5    Click Button    Start Acceptance
+
+Start Employee Election
+    Wait Until Keyword Succeeds    30    5    Page Should Contain    Enrollment Summary    Enrollment Summary page has not been displayed
+    Wait Until Keyword Succeeds    30    5    Click Button    View Elections
+
+
 Enter details in General page
-    Wait Until Page Contains Element    name=Enrollment.Employer.Mailing_Address.Same_Add_As_Physical    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.Employer.Mailing_Address.Same_Add_As_Physical    General screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Select Radio Button    Enrollment.Employer.Mailing_Address.Same_Add_As_Physical    Yes
     Select Radio Button    Enrollment.Employer.Billing_Address.Same_Add_As_Mailing    Yes
     Input Text    name=Enrollment.Employer.Billing_Address.Tel_Phone    1234567890
@@ -143,9 +164,10 @@ Enter details in General page
     Select From List    name=Enrollment.Employer.Type_Owenership    Corporation
     Input Text    name=Enrollment.Employer.Fed_Tax_ID    ${federalTaxId}
     Input Text    name=Enrollment.Employer.Business_Start_Date    012011
-    Select Radio Button    Enrollment.Employer.Comp_Have_Multiple_Loc    No
+    #Select Radio Button    Enrollment.Employer.Comp_Have_Multiple_Loc    No
+    Execute Javascript    $("[name='Enrollment.Employer.Comp_Have_Multiple_Loc'][value='No']").click()
     Select Radio Button    Enrollment.Employer.Comp_Have_Multi_Tax_Id    No
-    Click Link    Next
+    Execute Javascript    $('a[class*="buttonNext"]').click()
 
 #Enter details in Eligibility Requirements page
 #    Wait Until Page Contains Element    name=Enrollment.Eligibility_Requirements.Total_EE    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
@@ -172,7 +194,7 @@ Enter details in General page
 
 Enter details in Eligibility page
     [Arguments]    ${totalEmployees}
-    Wait Until Page Contains Element    name=Enrollment.Eligibility_Requirements.Uni_Neg_Bargain_Agree    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.Eligibility_Requirements.Uni_Neg_Bargain_Agree    Eligibility screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Select Radio Button    Enrollment.Eligibility_Requirements.Uni_Neg_Bargain_Agree    No
     Select Radio Button    Enrollment.Eligibility_Requirements.Is_Excluded_EE_Class    No
     Select Radio Button    Enrollment.Eligibility_Requirements.Have_Dom_Partner_Cov    No
@@ -181,13 +203,13 @@ Enter details in Eligibility page
     Click Link    Next
 
 Enter details in Continuation/Disability page
-    Wait Until Page Contains Element    name=Enrollment.Disability.Any_EE_Proposed_Cov_On_Cobra    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.Disability.Any_EE_Proposed_Cov_On_Cobra    Continuation/Disability screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Select Radio Button    Enrollment.Disability.Any_EE_Proposed_Cov_On_Cobra    No
     Select Radio Button    Enrollment.Disability.Any_EE_Proposed_Cov_Disabled    No
     Click Link    Next
 
 Enter details in Health Plan Information
-    Wait Until Page Contains Element    name=Enrollment.Eligibility_Requirements.New_EE_Waiting_Period    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.Eligibility_Requirements.New_EE_Waiting_Period    Health Plan Information screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Select From List    name=Enrollment.Eligibility_Requirements.New_EE_Waiting_Period    30 days
     Select From List    name=Enrollment.Eligibility_Requirements.New_EE_Effective_Date    1st of the month following
     Select From List    name=Enrollment.Eligibility_Requirements.Rehire_Effective_Date    Following original probality period
@@ -202,29 +224,27 @@ Enter details in Health Plan Information
     Click Link    Next
 
 Enter details in Current Coverage page
-    Wait Until Page Contains Element    name=Enrollment.Current_Coverage.Is_Comp_Offer_Ot_Group_Cov    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.Current_Coverage.Is_Comp_Offer_Ot_Group_Cov    Current Coverage screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Select Radio Button    Enrollment.Current_Coverage.Is_Comp_Offer_Ot_Group_Cov    No
     Select Radio Button    Enrollment.Current_Coverage.Replacing_Group_Health_Ins    No
     Select Radio Button    Enrollment.Current_Coverage.Have_Compensation_Carrier    No
     Select Radio Button    Enrollment.Current_Coverage.Any_EE_Not_Covered_Compensation    No
-    Capture Page Screenshot    Current_Coverage_page.png
+    Sleep    10
     Click Link    Next
 
 Enter details in HRA Contribution page
-    Wait Until Page Contains Element    name=Enrollment.HRA_Info.Is_Comp_Offer_HRA    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.HRA_Info.Is_Comp_Offer_HRA    HRA Contribution screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Select Radio Button    Enrollment.HRA_Info.Is_Comp_Offer_HRA    No
     Click Link    Next
 
 Enter details in HSA Contribution page
-    Wait Until Page Contains Element    name=Enrollment.HSA_Info.Is_Comp_Offer_HSA    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.HSA_Info.Is_Comp_Offer_HSA    HSA Contribution screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Select Radio Button    Enrollment.HSA_Info.Is_Comp_Offer_HSA    No
-    Capture Page Screenshot    HSA_page.png
     Click Link    Next
 
 Enter details in Small Employer Disclosure
     [Arguments]    ${agentName}    ${agentMI}    ${agentLast}
-    Sleep    10
-    Wait Until Page Contains Element    name=Enrollment.Disclosure.Agreed_To_Certify    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.Disclosure.Agreed_To_Certify    Small Employer Disclosure screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Click Element    xpath=//input[@name='Enrollment.Disclosure.Agreed_To_Certify' and not(@disabled)]
     Input Text    name=Enrollment.Disclosure.First_Name    ${agentName}
     Input Text    name=Enrollment.Disclosure.Middle_Initial    ${agentMI}
@@ -241,8 +261,8 @@ Enter details in Small Employer Disclosure
 
 Enter details in Signature page
     [Arguments]    ${firstName}    ${middleName}    ${lastName}
-    Wait Until Page Contains Element    xpath=//a[contains(text(),'Submit')]    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
-    Sleep    3
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.Signature.First_Name    Signature screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    #Sleep    3
     ${isBrokerAgreeDisplayed}=    Get Matching Xpath Count     //input[@name="Enrollment.Signature.Agreed_To_Terms"]
     ${isSummaryOfBenefits}=    Get Matching Xpath Count     //input[@name='Enrollment.Signature.Is_Medical_Coverage']
     #${isSBCAcknowledgementDispalyed}=    Get Matching Xpath Count     //input[@name="questions['sbcProvided'].response.booleanValue"]
@@ -261,22 +281,23 @@ Enter details in Signature page
     Click Link    Submit
  
 Enter details in Employer's Statement page
-    Sleep    10
-    Wait Until Page Contains Element    name=Enrollment.Signature.ES_First_Name    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
-    Select Checkbox    xpath=//input[@name='Enrollment.Signature.Agreed_To_Terms' and not(@disabled)]
+    Wait Until Keyword Succeeds    100    5    Page Should Contain Element    name=Enrollment.Signature.ES_First_Name    Employer's Statement screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Sleep    5
     Input Text    name=Enrollment.Signature.ES_First_Name    ${employerName}
     Input Text    name=Enrollment.Signature.ES_Last_Name    Employer
     Input Text    name=Enrollment.Signature.ES_Title    director
     Input Text    name=Enrollment.Signature.ES_Telephone_Number    1234567890
+    Select Checkbox    xpath=//input[@name='Enrollment.Signature.Agreed_To_Terms' and not(@disabled)]
     Click Link    Next
 
 Enter details in Certification page
     [Arguments]    ${agentName}    ${agentMI}    ${agentLast}
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.Certification.Cov_Made_By    Certification screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Wait a Bit
-    Wait Until Page Contains Element    name=Enrollment.Certification.Cov_Made_By    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Execute Javascript     $("[name='Enrollment.Certification.Cov_Made_By']").val('${employerName} Employer')
     Execute Javascript     $("[name='Enrollment.Certification.Represented_By']").val('${agentName} ${agentLast}')
-    Input Text    name=Enrollment.Certification.Signed_On_Date    ${todaysDate}
+    Execute Javascript    $("[name='Enrollment.Certification.Signed_On_Date']").val('${todaysDate1}')
+    Wait a Bit
     Select Checkbox    name=Enrollment.Certification.Agreed_To_Terms
     Select Checkbox    name=Enrollment.Certification.Agreed_To_Employer_Sign
     Input Text    name=Enrollment.Certification.First_Name    ${agentName}
@@ -293,9 +314,9 @@ Enter details in Certification page
     Click Link    Submit
 
 Pass Employer Submission Confirmation page
-    Wait Until Keyword Succeeds    60    5    Page Should Contain Element    xpath=//a[contains(text(),'Return to Manage Enrollment')]
+    Wait Until Keyword Succeeds    60    5    Page Should Contain Element    xpath=//a[contains(text(),'Return to Manage Enrollment')]    Employer Submission Confirmation screen has not been displayed
     Page Should Contain    Submission Confirmation
-    Sleep    2
+    Wait a Bit
     Click Link    Return to Manage Enrollment
 
 Pass Verify Census page
@@ -309,7 +330,7 @@ Pass Start Employee Enrollment Page
     Click Element    xpath=//button[contains(text(),'Start Enrollment')]
 
 Pass Employee Submission Confirmation page
-    Wait Until Page Contains Element    xpath=//a[contains(text(),'Return to Manage Enrollment')]    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    60    5    Page Should Contain Element    xpath=//a[contains(text(),'Return to Manage Enrollment')]    Employee Submission Confirmation screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Sleep    3
     Click Link    Return to Manage Enrollment
 
@@ -355,8 +376,8 @@ Minus Year
     [Return]    ${retDate}
 
 Pass Application Summary page
-    Wait Until Page Contains Element    xpath=//a[contains(text(),'Print')]    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
-    Sleep    15
+    Wait Until Keyword Succeeds    320    5    Page Should Contain Element    xpath=//a[contains(text(),'Print')]
+    Sleep    20
     Wait Until Keyword Succeeds    60    5    Execute Javascript    $('a[class*="buttonNext"]').click()
     
 Pass Prior to Applying page
@@ -388,11 +409,11 @@ Enter details in Employer Representative page
 Start Enrollment for Employee
     [Arguments]    ${employeeNumber}
     Click Element    xpath=//tr[td[contains(.,'${employeeName${employeeNumber}}')]]//button[contains(@value,'Start')]
-    
+
 View Enrollment for Employee
     [Arguments]    ${employeeNumber}
     Click Element    xpath=//tr[td[contains(.,'${employeeName${employeeNumber}}')]]//button[contains(@value,'View')]
-    
+
 Enter details in Census page for Employees
     [Arguments]    ${employeesCount}
     ${isFNdisplayed}=    Get Matching Xpath Count     //input[@name='showFNCol']
@@ -436,10 +457,10 @@ Enter details in Census page through Import file
 
 Enter details in Employee Information page for Employee
     [Arguments]    ${employeeNumber}
-    Wait Until Page Contains Element    name=Enrollment.Employee.First_Name    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.Employee.First_Name    Employee Information screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Input Text    name=Enrollment.Employee.Middle_Initial    M
 #Here is a known issue with the Last Name field, it doesn't allow spaces
-    Input Text    name=Enrollment.Employee.Last_Name    BonJovi
+    Input Text    name=Enrollment.Employee.Last_Name    Bon Jovi
     #    Input Text    name=Enrollment.Employee.DOB    11111980
     Input Text    name=Enrollment.Employee.SSN    ${federalTaxIdEmployee}
     Select Radio Button    Enrollment.Employee.Gender    Male
@@ -461,12 +482,12 @@ Enter details in Employee Information page for Employee
     Select Radio Button    Enrollment.Employee.HealthCov_Type    Employee Only
 #    Select From List    name=Enrollment.Employee.Email_Type    Work
     Sleep    3
-    Capture Page Screenshot    employee_info_page.png
-    Click Link    Next
+    #Click Link    Next
+    Execute Javascript    $('a[class*="buttonNext"]').click()
     
 Select Plan in Coverage Selection page
     [Arguments]    ${desiredPlan}
-    Wait Until Page Contains Element    xpath=//tr[td/a[contains(text(),'${desiredPlan}')]]//a[contains(text(),'Select Plan')]    ${APPCONF_LOAD_TIMEOUT}    
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    xpath=//tr[td/a[contains(text(),'${desiredPlan}')]]//a[contains(text(),'Select Plan')]
     ...    Desired plan is not displayed or we are not on Coverage Selection page
     #${value}=    Get Element Attribute    xpath=//tr[td/a[contains(text(),'${desiredPlan}')]]//input[@type='radio']@value
     #Select Radio Button    Enrollment.Medical_Plan.Plan_ID    ${value}
@@ -474,12 +495,12 @@ Select Plan in Coverage Selection page
     Click Link    Next
     
 Pass Waiver page
-    Wait Until Page Contains    Waiver    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain    Waiving for myself    Waiver screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Sleep    3
     Click Link    Next
 
 Enter details in Other Coverage Information page
-    Wait Until Page Contains Element    name=Enrollment.Other_Coverage.Med_A_Coverage    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.Other_Coverage.Med_A_Coverage    Other Coverage Information screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Select Radio Button    Enrollment.Other_Coverage.Med_A_Coverage    No
     Select Radio Button    Enrollment.Other_Coverage.Med_B_Coverage    No
     Select Radio Button    Enrollment.Other_Coverage.Med_C_Coverage    No
@@ -487,30 +508,30 @@ Enter details in Other Coverage Information page
     Click Link    Next
 
 Pass Health Provider page
-    Wait Until Page Contains Element   name=Enrollment.Employee.PCP.Select_Your_network    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element   name=Enrollment.Employee.PCP.Select_Your_network    Health Provider screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Sleep    3
     Click Link    Next
     
 Pass Race Ethnicity page
-    Wait Until Page Contains    Language, Race/Ethnicity Information    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain    Language, Race/Ethnicity Information    Race Ethnicity screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Sleep    3
     Click Link    Next
     
 Enter details in Primary Care Provider page
-    Wait Until Page Contains    Primary Care Provider
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain    Primary Care Provider
     Input Text    name=Enrollment.Employee.PCP.Provider_Name    Dr. House
     Input Text    name=Enrollment.Employee.PCP.Provider_ID    12345678
     Select Radio Button    Enrollment.Employee.PCP.Current_Patient    No
     Click Link    Next
 
 Enter details in Terms and Conditions page
-    Wait Until Page Contains Element    name=Enrollment.Terms_And_Condition.Agreed_To_Terms    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.Terms_And_Condition.Agreed_To_Terms    Terms and Conditions screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Select Checkbox    name=Enrollment.Terms_And_Condition.Agreed_To_Terms
     Select Radio Button    Enrollment.Terms_And_Condition.Assisted_Application    No
     Click Link    Next
 
 Enter details in Authorization page
-    Wait Until Page Contains Element    name=Enrollment.Terms_And_Condition.Auth_Use_Agreed_To_Terms    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.Terms_And_Condition.Auth_Use_Agreed_To_Terms     Authorization screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Select Checkbox    name=Enrollment.Terms_And_Condition.Auth_Use_Agreed_To_Terms
     Click Link    Next
 
@@ -553,7 +574,7 @@ Pass Dependent Information page
     Click Link    Next
 
 Pass Plan Offering Options page
-    Wait Until Page Contains    Plan Offering Options    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    30    5    Page Should Contain    Plan Offering Options    Page takes more than 30s to load or wrong page displayed
     Sleep    3
     Click Button    Continue
 
@@ -568,33 +589,33 @@ Pass Employee Elections page
     Click Button    Continue
 
 Pass Employer Demographics page
-    Wait Until Page Contains    Employer Demographics    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain    Name/Title of Administrative Contact     Employer Demographics page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Sleep    3
     Click Link    Next
 
 Pass Employer Contribution page
-    Wait Until Page Contains    Employer Contribution    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain    Selected Plans     Employer Contribution page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Sleep    3
     Click Link    Next
 
 Pass Eligibility Requirements page
-    Wait Until Page Contains    Eligibility Requirements    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain    Number of employees     Eligibility Requirements page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Sleep    3
     Click Link    Next
 
 Enter details in Coverage Details page
-    Wait Until Page Contains    Coverage Details    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.Coverage_Details.Agree_To_Receive_Notice_Email     Coverage Details page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Select Radio Button    Enrollment.Coverage_Details.Agree_To_Receive_Notice_Email    No
     Click Link    Next
 
 Pass Employer Acceptance Summary
-    Wait Until Page Contains    Employer Acceptance Summary    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    120    5    Page Should Contain Element    xpath=//a[contains(text(),'Print')]     Employer Acceptance Summary page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Sleep    3
     Click Link    Next
     
 Enter details in Employer Acceptance Signature page
     [Arguments]    ${agentName}    ${agentMI}    ${agentLast}
-    Wait Until Page Contains Element    name=Enrollment.Non_Employer_Acpt_Signature.Agreed_To_Terms    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    120    5    Page Should Contain Element    name=Enrollment.Non_Employer_Acpt_Signature.Agreed_To_Terms     Employer Acceptance Signature page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Select Checkbox    name=Enrollment.Non_Employer_Acpt_Signature.Agreed_To_Terms
     Input Text    name=Enrollment.Non_Employer_Acpt_Signature.Employer_First_Name    ${employerName}
     Input Text    name=Enrollment.Non_Employer_Acpt_Signature.Employer_Last_Name    Employer
@@ -632,7 +653,7 @@ Enter details in Acceptance options page
     
 Pass Start Employer Acceptance page
     Sleep    3
-    Click Button    Continue
+    Wait Until Keyword Succeeds    30    5    Click Button    Continue
    
 Pass Enrollment Summary - Finalize Acceptance page
     Sleep    3
@@ -710,9 +731,9 @@ Search for case
     
 Open enrollment after search
     Click Button    View
-    Wait a Bit
+    Sleep    5
     Click Link    New Business
-    Wait a Bit
+    Sleep    5
     Click Button    View
 
 UW Approve enrollment
@@ -725,7 +746,7 @@ Pass Select Plans page
     Click Button    Continue
     
 Pass Enrollment Summary page
-    Wait Until Page Contains Element    xpath=//a[contains(text(),'Print')]    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    120    5    Page Should Contain Element    xpath=//a[contains(text(),'Print')]    Enrollment Summary screentakes more than 120s to load or wrong page displayed
     Sleep    15
     Capture Page Screenshot    Application_Summary_page.png
     #Click Link    Next
@@ -796,6 +817,7 @@ Initialize Variables
     ${employerLogin}=     Catenate    login${employerName}
     ${employerPass}=    Set Variable    emp123qwe
     ${todaysDate}=    Catenate    ${mm}${dd}${yyyy}
+    ${todaysDate1}=    Catenate    ${mm}/${dd}/${yyyy}
     #${sgPlan1}=    Set Variable    akcttest@gmail.com
     #${sgPlan2}=    Set Variable    akcttest@gmail.com
     #${sgPlan3}=    Set Variable    akcttest@gmail.com
@@ -820,7 +842,7 @@ Initialize Variables
     Set Test Variable    ${childName4}
     Set Test Variable    ${rate}
     Set Test Variable    ${applicationID}
-    
+    Set Suite Variable    ${todaysDate1}
     #SG Variables
     Set Test Variable    ${sgCaseName}
     Set Test Variable    ${sgZip}
@@ -843,7 +865,6 @@ Initialize Variables
     #Set Test Variable    ${sgPlan2}
     #Set Test Variable    ${sgPlan3}
     Set Test Variable    ${listOfPlans}
-    
     Sleep    2s
     Navigate To
 
@@ -890,6 +911,18 @@ Selects SG Case
     Execute Javascript    $('#activities').parent().showSuperfishUl()
     Execute Javascript    $('#newCase').parent().showSuperfishUl()
     Click Link    sgCase
+
+Starts SG Quote from a case
+    Sleep    10
+    Wait Until Keyword Succeeds    30    5    Click Link    New Business
+    Sleep    10
+    Wait Until Keyword Succeeds    30    5    Click Button    SG Quote
+
+Starts SG Enrollment from a case
+    Sleep    10
+    Wait Until Keyword Succeeds    30    5    Click Link    New Business
+    Sleep    10
+    Wait Until Keyword Succeeds    30    5    Click Button    Start Enrollment
 
 Selects SG Enroll
     Wait Until Page Contains    Dashboard    ${SELENIUM_TIMEOUT}
@@ -988,7 +1021,9 @@ User Logs out from the application
     Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Click Link    Log Out
 
 Logs out from the application
-    Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Click Link    Log Out
+    Wait a Bit
+    Click Element    xpath=//span[@class="welcomeName"]
+    Click Link    Log Out
 
 Connect Gmail
     Go To    http://gmail.com/

@@ -69,7 +69,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>smoke-all-long</id>
+			<id>smoke-all</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
@@ -185,6 +185,90 @@
 								<argument>target/robot</argument>
 								<argument>--include</argument>
 								<argument>smokeANDsg</argument>
+                                <argument>--exclude</argument>
+								<argument>draft</argument>
+                                <argument>robot-tests/</argument>
+							</arguments>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+        <profile>
+			<id>smoke-spg-agent</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.1</version>
+						<executions>
+							<execution>
+								<phase>integration-test</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<executable>python</executable>
+							<workingDirectory>.</workingDirectory>
+							<arguments>
+								<argument>-m</argument>
+								<argument>robot.run</argument>
+								<argument>--argumentfile</argument>
+								<argument>${BROWSER_PROFILE}</argument>
+                                <argument>--variable</argument>
+								<argument>HOST:${HOST_OVERRIDE}</argument>
+								<argument>--outputdir</argument>
+								<argument>target/robot</argument>
+								<argument>--include</argument>
+								<argument>smokeANDshoppingANDagent</argument>
+                                <argument>--exclude</argument>
+								<argument>draft</argument>
+                                <argument>robot-tests/</argument>
+							</arguments>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+        <profile>
+			<id>smoke-spg-consumer</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.1</version>
+						<executions>
+							<execution>
+								<phase>integration-test</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<executable>python</executable>
+							<workingDirectory>.</workingDirectory>
+							<arguments>
+								<argument>-m</argument>
+								<argument>robot.run</argument>
+								<argument>--argumentfile</argument>
+								<argument>${BROWSER_PROFILE}</argument>
+                                <argument>--variable</argument>
+								<argument>HOST:${HOST_OVERRIDE}</argument>
+								<argument>--outputdir</argument>
+								<argument>target/robot</argument>
+								<argument>--include</argument>
+								<argument>smokeANDshoppingANDconsumer</argument>
                                 <argument>--exclude</argument>
 								<argument>draft</argument>
                                 <argument>robot-tests/</argument>

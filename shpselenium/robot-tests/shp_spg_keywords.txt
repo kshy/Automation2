@@ -43,10 +43,7 @@ Anonymous User click Find Plan and proceed to Welcome page
     Click Link    fCoverage
     Wait Until Page Contains    Welcome    ${SELENIUM_TIMEOUT}    Error on Welcome page
     Click Link    Find Plan
-    Sleep    5
-    Wait Until Page Contains Element    xpath=//a[contains(text(),'Get Started')]   ${SELENIUM_TIMEOUT}
 
-    
 Generate Date
     ${yyyy}    ${mm}    ${dd}=    Get Time    year month day
     ${temp_date}=    Catenate    ${mm}${dd}${yyyy}
@@ -64,11 +61,14 @@ Initialize Variables
     ${ifpCaseName}=    Catenate    IFPCaseAuto${yyyy}${mm}${dd}${hh}${min}${ss}
     ${userFName}=    Catenate    FN${randStr}
     ${userLName}=    Catenate    LN${randStr}
+    ${userMI}=    Set Variable    ${EMPTY}
     ${spouseFName}=    Catenate    SFN${randStr}
     ${spouseLName}=    Catenate    SLN${randStr}
     ${child1FName}=    Catenate    ConeFN${randStr}    
     ${child1LName}=    Catenate    ConeLN${randStr}
     ${child2LName}=    Catenate    CtwoLN${randStr}
+    ${consumerID}=    Catenate    consumer${randNbr}
+    ${consumerPassword}=    Set Variable    password1
     ${guardianFName}=    Catenate    GF${randStr}
     ${fname2}=    Generate Random String    6    [UPPER]
     ${fname3}=    Generate Random String    7    [UPPER]
@@ -76,7 +76,7 @@ Initialize Variables
     ${dep_names}    Create List
     ${dep_dobs}    Create List
     ${dep_genders}    Create List
-    ${consumerBirthDate}=    Set Variable    02141974
+    ${consumerBirthDate}=    Set Variable    02/14/1974
     ${email}=    Set Variable    tvolvk.test@gmail.com
     ${emailPwd}=    Set Variable    Secur1ty_Auto
     Set Test Variable    ${ifpCaseName}
@@ -94,6 +94,9 @@ Initialize Variables
     Set Suite Variable    ${dep_genders}    
     Set Test Variable    ${userFName}
     Set Test Variable    ${userLName}
+    Set Test Variable    ${userMI}
+    Set Test Variable    ${primaryFName}    ${userFName}
+    Set Test Variable    ${primaryLName}    ${userLName}
     Set Test Variable    ${spouseFName}
     Set Test Variable    ${spouseLName}
     Set Test Variable    ${child1FName}
@@ -104,6 +107,8 @@ Initialize Variables
     Set Test Variable    ${email}
     Set Test Variable    ${emailPwd}
     Set Test Variable    ${consumerBirthDate}
+    Set Test Variable    ${consumerID}
+    Set Test Variable    ${consumerPassword}
 
 #Enter demographic data for the primary applicant
 #    [Arguments]    ${zip}    ${county_index}    ${fname}    ${date}    ${gender}    ${tobacco}
@@ -134,20 +139,20 @@ Enter demographic data for the primary applicant
     Select From List    xpath=//*[@name='gender']    ${gender}
     Select From List    xpath=//*[@name='isSmoker']    ${tobacco}
     Set Global Variable    ${zipCode}    ${zip}
-    Set Global Variable    ${userFName}    ${fname}
+    Set Global Variable    ${primaryFName}    ${fname}
     Set Global Variable    ${selfDOB}    ${date}
     Set Global Variable    ${selfGender}    ${gender}
     Set Global Variable    ${selfTobacco}    ${tobacco}
 
 Enter details in Create IFP Case page
-    [Arguments]    ${fname}=${userFname}    ${zip}=${zipCode}
-    Wait Until Page Contains Element    name=caseProfileData.caseName    ${SELENIUM_TIMEOUT}    Create IFP Case page wasn't displayed or wrong page is displayed
+    [Arguments]    ${fname}=${primaryFname}    ${zip}=${zipCode}
+    Wait Until Keyword Succeeds    30    5    Page Should Contain Element    name=caseProfileData.caseName    Create IFP Case page wasn't displayed or wrong page is displayed
     Wait a Bit
     Input Text    name=caseProfileData.caseName    ${ifpCaseName}
     Select From List    caseProfileData.caseState    WI
     Input Text    name=caseProfileData.caseZip    ${zip}
     Input Text    name=caseProfileData.contactFirstName    ${fname}
-    Input Text    name=caseProfileData.contactLastName     ${userLName}
+    Input Text    name=caseProfileData.contactLastName     ${primaryLName}
     Input Text    name=caseProfileData.contactEmailAddress    ${email}
     Click Button    Continue
 
@@ -500,7 +505,7 @@ Check that See & Compare plans page is opened
     Wait Until Page Contains    See & Compare    ${SELENIUM_TIMEOUT}
     
 Wait Until ${pagename} page is opened
-    Wait Until Keyword Succeeds    30    5    Page Should Contain    ${pagename}
+    Wait Until Keyword Succeeds    80    5    Page Should Contain    ${pagename}     ${pagename} has not been displayed
     
 #################### Subsidy keywords ############################
 #
@@ -970,7 +975,7 @@ Change plan display on page to
     Wait a Bit
 
 Switch to small view
-    Wait Until Page Contains    Add to Cart    ${SELENIUM_TIMEOUT}
+    Wait Until Keyword Succeeds    30    5    Page Should Contain    Add to Cart    ${SELENIUM_TIMEOUT}
     Sleep    10
     Click Element    xpath=//a[@title='View All Plans']
 
@@ -1018,16 +1023,16 @@ Select plan(s) small view
 
 Click Add to Cart for plan
     [Arguments]    ${planName}
-    Click Element    xpath=//div[@class='plan-card-details' and a[contains(text(),'${planName}')]]//a[text()='Add to Cart']
+    Wait Until Keyword Succeeds    30    5    Click Element    xpath=//div[@class='plan-card-details' and a[contains(text(),'${planName}')]]//a[text()='Add to Cart']
     Set Global Variable    ${selected plan}    ${planName}
     
 Click Add to Quote for plan
     [Arguments]    ${planName}
-    Click Element    xpath=//div[@class='plan-card-details' and a[contains(text(),'${planName}')]]//a[contains(.,'Add to Quote')]
+    Wait Until Keyword Succeeds    30    5    Click Element    xpath=//div[@class='plan-card-details' and a[contains(text(),'${planName}')]]//a[contains(.,'Add to Quote')]
 
 Click Dental to plan
     [Arguments]    ${dental}
-    Click Element    xpath=//div[@class='plan-card' and div[contains(text(),'${dental}')]]//a[text()='Add']
+    Wait Until Keyword Succeeds    30    5    Click Element    xpath=//div[@class='plan-card' and div[contains(text(),'${dental}')]]//a[text()='Add']
 
 #Enter details in Wellmark SSO Front Door page
 #    Wait Until Page Contains    Wellmark SSO Front Door    ${SELENIUM_TIMEOUT}    Wellmark SSO Front Door page has not displayed
@@ -1109,16 +1114,22 @@ Click Dental to plan
 #    Click Element    xpath=//div[@class='content-section play after-sidebar']/div[${current_plan}]/input
 
 ################### Login Keywords ###############    
-#
-#Login into application
-#    [Arguments]    ${username}    ${password}
-#    Click Link    Log In 
-#    Wait Until Page Contains Element    username    ${SELENIUM_TIMEOUT}    Login page wasn't displayed
-#    Input Text    LoginEdit_username    ${username}
-#    Input Text    LoginEdit_password    ${password}
-#    sleep    2s
-#    Click Button    LoginEdit_login_button    
-#    
+
+Consumer logs in to application
+    [Arguments]    ${username}=${consumerID}    ${password}=${consumerPassword}
+    Click Link    fCoverage
+    Wait Until Page Contains    Welcome    ${SELENIUM_TIMEOUT}    Error on Welcome page
+    Click Link    Log In
+    Wait Until Page Contains Element    username    ${SELENIUM_TIMEOUT}    Login page wasn't displayed
+    Input Text    LoginEdit_username    ${username}
+    Input Text    LoginEdit_password    ${password}
+    Sleep    2s
+    Click Button    LoginEdit_login_button
+    Wait Until Page Contains    Welcome, ${primaryFName} ${primaryLName}!    ${SELENIUM_TIMEOUT}    Dashboard has not displayed
+    Set Global Variable    ${userFName}    ${primaryFName}
+    Set Global Variable    ${userMI}    ${EMPTY}
+    Set Global Variable    ${userLName}    ${primaryLName}
+
 Broker logs in to application
     Click Link    Returning User Login
     Wait Until Page Contains    Welcome    ${SELENIUM_TIMEOUT}    Welcome screen has not displayed
@@ -1128,7 +1139,10 @@ Broker logs in to application
     Sleep    2s
     Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Click Button    name=login.button
     Wait Until Page Contains    Welcome, Bob Broker!    ${SELENIUM_TIMEOUT}    Dashboard has not displayed
-    
+    Set Global Variable    ${userFName}    Bob
+    Set Global Variable    ${userMI}    B
+    Set Global Variable    ${userLName}    Broker
+
 Shah Broker logs in to application
     Click Link    Returning User Login
     Wait Until Page Contains    Welcome    ${SELENIUM_TIMEOUT}    Welcome screen has not displayed
@@ -1137,7 +1151,10 @@ Shah Broker logs in to application
     Comment    Introduced sleep as per 6.1 maint application behaviour
     Sleep    2s
     Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Click Button    name=login.button
-    Wait Until Page Contains    Welcome, shah broker!    ${SELENIUM_TIMEOUT}    Dashboard has not displayed
+    Wait Until Page Contains    Welcome, Shah Broker!    ${SELENIUM_TIMEOUT}    Dashboard has not displayed
+    Set Global Variable    ${userFName}    Shah
+    Set Global Variable    ${userMI}    ${EMPTY}
+    Set Global Variable    ${userLName}    Broker
 
 Sales Represenative logs in to application
     Click Link    Returning User Login
@@ -1148,6 +1165,28 @@ Sales Represenative logs in to application
     Sleep    2s
     Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Click Button    name=login.button
     Wait Until Page Contains    Welcome, Internal User!    ${SELENIUM_TIMEOUT}    Dashboard has not displayed
+    Set Global Variable    ${userFName}    Internal
+    Set Global Variable    ${userMI}    I
+    Set Global Variable    ${userLName}    User
+
+Logs out from the application
+    Wait a Bit
+    Click Element    xpath=//span[@class="welcomeName"]
+    Click Link    Log Out
+
+Search for case
+    Sleep    5
+    Wait Until Page Contains Element    id=quickSearchText    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Input Text    id=quickSearchText    ${ifpCaseName}
+    Click Element    id=quickSearchButton
+    
+Open enrollment after search
+    Sleep    5
+    Click Button    View
+    Wait a Bit
+    Click Link    New Business
+    Wait a Bit
+    Click Element    xpath=//*[@id='IFPNewBusinessActivities_view_application_button']
 
 Selects IFP Case
     Wait Until Page Contains    Dashboard    ${SELENIUM_TIMEOUT}
@@ -1161,7 +1200,10 @@ Selects IFP Quoting
     Execute Javascript    $('a:contains("New Quote")').parent().showSuperfishUl()
     Click Link    Individual and Family
 
-Start Quote
+Start Quote from a case
+    Sleep    10
+    Click Link    New Business
+    Wait Until Keyword Succeeds    30    5    Page Should Contain    Create a Quote
     ${isFFMon}=    Get Matching Xpath Count     xpath=//a[text()='Traditional Quote']
     Run Keyword If    '${isFFMon}'=='0'    Click Button     Create Quote
     Run Keyword Unless    '${isFFMon}'=='0'    Click Link    Traditional Quote
@@ -1173,7 +1215,7 @@ Finalize Quote
     
 
 Proceed to the Demographic page
-    Wait Until Keyword Succeeds    30    5    Click Link    Get Started
+    Wait Until Keyword Succeeds    70    5    Click Link    Get Started
     ${isFFMon}=    Get Matching Xpath Count     xpath=//a[text()='Skip & Shop Plans']
     Run Keyword Unless    '${isFFMon}'=='0'    Click Link    Skip & Shop Plans
 
@@ -1198,8 +1240,9 @@ Proceed to the Demographic page
 #    Page Should Contain Link    Download Application    
 #    
 Enter details in Forward app to consumer
-    Wait Until Page Contains Element    name=birthDate    ${SELENIUM_TIMEOUT}    Forward Application to Consumer screen wasn't displayed
-    Input Text    name=birthDate    ${consumerBirthDate}
+    Wait Until Keyword Succeeds    30    5    Page Should Contain Element    name=birthDate    Forward Application to Consumer screen wasn't displayed
+    ${consumerDOB}=    Get Value    name=birthDate
+    Run Keyword Unless    '${consumerDOB}'=='${consumerBirthDate}'    Input Text    name=birthDate    ${consumerBirthDate}
     Input Text    name=message    Application is ready to be sent
     Sleep    5
 #    Input Text    name=userProfile.user.emailAddress    ${email}
@@ -1208,7 +1251,7 @@ Enter details in Forward app to consumer
     Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Page Should Contain    Thank you for Sending an Application
 
 Enter details in Forward app to agent
-    Wait Until Page Contains Element    name=message    ${SELENIUM_TIMEOUT}    Forward Application to Consumer screen wasn't displayed
+    Wait Until Keyword Succeeds    30    5    Page Should Contain Element    name=message    Forward Application to Agent screen wasn't displayed
     Input Text    name=message    Application is ready to be sent
     Sleep    5
     Click Button    Forward Application
@@ -1217,11 +1260,12 @@ Enter details in Forward app to agent
 
 Forward application to ${userRole}
     #${userRole}    consumer    agent
-    Sleep    5
+    Sleep    15
     Execute Javascript    $("[class='buttonForward']").click()
     Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    3s    Page Should Contain    Are you sure you want to forward this application?
     Click Element    xpath=//*[@id='popup_ok']
-    Enter details in Forward app to ${userRole}
+    Run Keyword If    '${userRole}'=='consumer'    Enter details in Forward app to consumer
+    Run Keyword Unless    '${userRole}'=='consumer'    Enter details in Forward app to agent
     
 
 Customer opens email and registers
@@ -1254,18 +1298,18 @@ User opens email invitation message
     ${curTime}=    Get Time    epoch
     ${deadLine}=    Evaluate    ${curTime}+${EMAIL_TIMEOUT}
     :FOR    ${index}    IN RANGE    100
-    \    ${count}=    Get Matching Xpath Count    //span[contains(.,'${userFName} ${userLName}')]
+    \    ${count}=    Get Matching Xpath Count    //span[contains(.,'${primaryFName} ${primaryLName}')]
     \    ${elapse}=        Get Time    epoch
     \    Run Keyword If     ${count}>0    Exit For Loop    
     \    Run Keyword If    ${elapse}>${deadLine}    Exit For Loop
     \    Sleep    20
     \    Wait Until Page Contains Element    xpath=//a[contains(text(),'Inbox')]    5
     \    Click Element    xpath=//a[contains(text(),'Inbox')]
-    Run Keyword If    ${count}>0    Click Element    xpath=//span[contains(.,'${userFName} ${userLName}')]
+    Run Keyword If    ${count}>0    Click Element    xpath=//span[contains(.,'${primaryFName} ${primaryLName}')]
     Run Keyword If    ${elapse}>${deadLine}    Fail    Email was not recieved in ${EMAIL_TIMEOUT} seconds.    
 
 User verifies email content of gmail and proceed for registration
-    Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Page Should Contain    Dear ${userFName} ${userLName},
+    Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Page Should Contain    Dear ${primaryFName} ${primaryLName},
 #    log    ${appID}    WARN
 #    Page Should Contain    RE: Application ${appID}
     Page Should Contain    from Security Health Plan
@@ -1283,7 +1327,7 @@ User verifies email content of gmail and proceed for registration
 
 Enter detail in Consumer Registration
     Wait Until Page Contains    Consumer Registration    ${SELENIUM_TIMEOUT}    Consumer Registration screen wasn't displayed
-    Input Text    lastName    ${userLName}
+    Input Text    lastName    ${primaryLName}
     Input Text    dateOfBirth    ${consumerBirthDate}
     Click Element    xpath=//button[contains(text(),'Continue')]
 
@@ -1305,22 +1349,24 @@ Enter details in Prior To Applying page as consumer
     [Arguments]    ${method}=Online    ${agent}=No
     Wait Until Page Contains Element    name=priorToApplyingInfo.userProfile.user.lastName
     Sleep    5
-    Input Text    priorToApplyingInfo.userProfile.user.firstName    ${userFName}
-    Input Text    priorToApplyingInfo.userProfile.user.lastName    ${userLName}
+    Input Text    priorToApplyingInfo.userProfile.user.firstName    ${primaryFName}
+    Input Text    priorToApplyingInfo.userProfile.user.lastName    ${primaryLName}
     Input Text    priorToApplyingInfo.userProfile.address.addrLine1    Addr 12
     Input Text    priorToApplyingInfo.userProfile.address.city    Des Moines
     Input Text    priorToApplyingForm_priorToApplyingInfo_userProfile_user_emailAddress    ${email}
     Select From List    priorToApplyingForm_priorToApplyingInfo_userProfile_preferredContactMethod    Email
     Select From List    priorToApplyingForm_priorToApplyingInfo_userProfile_bestContactTime    Afternoon
-    Input Text    priorToApplyingInfo.registrationInfo.userId    consumer${randNbr}
-    Input Text    priorToApplyingInfo.registrationInfo.password    password1
-    #${randNbr}
-    Input Text    priorToApplyingInfo.registrationInfo.confirmPassword    password1
-    #${randNbr}
+    Input Text    priorToApplyingInfo.registrationInfo.userId    ${consumerID}
+    Input Text    priorToApplyingInfo.registrationInfo.password    ${consumerPassword}
+    Input Text    priorToApplyingInfo.registrationInfo.confirmPassword    ${consumerPassword}
     Select From List By Index    priorToApplyingInfo.registrationInfo.secretQuestion    3
     Input Text    priorToApplyingInfo.registrationInfo.secretAnswer    porsche
     ${otherinfo}=    Get Matching Xpath Count    xpath=//*[@name='priorToApplyingInfo.submissionMethod']
     Run Keyword Unless    '${otherinfo}'=='0'    Enter details for Submission method and work with agent
+    Set Global Variable    ${ifpCaseName}    ${primaryFName} ${primaryLName}
+    Set Global Variable    ${userFName}    ${primaryFName}
+    Set Global Variable    ${userMI}    ${EMPTY}
+    Set Global Variable    ${userLName}    ${primaryLName}
     Click Link    Continue
 
 Enter details for Submission method and work with agent
@@ -1333,8 +1379,8 @@ Broker completes Prior To Applying page
     [Arguments]    ${method}
     Wait Until Page Contains Element    userLastName
     Sleep    5
-    Input Text    userFirstName    ${userFName}
-    Input Text    userLastName    ${userLName}
+    Input Text    userFirstName    ${primaryFName}
+    Input Text    userLastName    ${primaryLName}
     Input Text    priorToApplyingForm_priorToApplyingInfo_userProfile_user_emailAddress    ${email}
     Select From List    priorToApplyingForm_priorToApplyingInfo_userProfile_preferredContactMethod    Email
     Select From List    priorToApplyingForm_priorToApplyingInfo_userProfile_bestContactTime    Morning
@@ -1359,9 +1405,9 @@ Pass through Checklist screen
 #
 Broker Enters Primary Applicant details, selects Coverage for
     [Arguments]    ${coverageFor}='Myself'
-    Wait Until Page Contains Element    Application.Coverage_For    ${SELENIUM_TIMEOUT}    Personal Information screen wasn't displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Application.Coverage_For    Primary applicant screen has not been displayed
     Select From List    Application.Coverage_For    ${coverageFor}
-    Execute Javascript    $("[name='Application.Applicant.Last_Name']").val('${userLName}')
+    Execute Javascript    $("[name='Application.Applicant.Last_Name']").val('${primaryLName}')
     Input Text    name=Application.Applicant.Address_1    Address11
     Input Text    name=Application.Applicant.City    Adams
     Select From List    name=Application.Applicant.State    WI
@@ -1372,51 +1418,51 @@ Broker Enters Primary Applicant details, selects Coverage for
 #    Input Text    name=Application.Applicant.Dob    11231981
     Select Radio Button    Application.Applicant.Gender    Male
     Run Keyword Unless    '${coverageFor}'=='My Child'    Select Radio Button    Application.Applicant.Tobacco    Yes
-    Run Keyword If    '${coverageFor}'=='My Child'    Enter Legal Guardian Info and update Coverage selection
+    Run Keyword If    '${coverageFor}'=='My Child'    Agent enters Legal Guardian Info and update Coverage selection
     Execute Javascript    $("[class='buttonNext']").click()
 
 Enter Primary Applicant details - Consumer
     [Arguments]    ${coverageFor}
-    Wait Until Page Contains Element    name=Application.Coverage_For    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
-    Input Text    name=Application.Applicant.Last_Name    ${userLName}
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Application.Coverage_For    Primary Applicant screens has not been displayed
+    Input Text    name=Application.Applicant.Last_Name    ${primaryLName}
     Input Text    name=Application.Applicant.Address_1    Addr 12
     Input Text    name=Application.Applicant.City    Des Moines
     Execute Javascript    $("[name='Application.Applicant.Mailing_Address.Address_Same_Primary'][value='Yes']").click()
     Input Text    name=Application.Applicant.Home_Phone    1111111111
     Input Text    name=Application.Applicant.Ssn    ${SSNcode}
-    Run Keyword If    '${coverageFor}'=='My Child'    Enter Legal Guardian Info and update Coverage selection
+    Run Keyword If    '${coverageFor}'=='My Child'    Consumer enters Legal Guardian Info and update Coverage selection
     #Select From List    name=Application.Applicant.Marital_Status    Single
     #Execute Javascript    $("[name='Application.Applicant.Disabled'][value='No']").click()
     #Execute Javascript    $("[name='Application.Applicant.Medicare_Eligible'][value='No']").click()
     Execute Javascript    $("[class='buttonNext']").click()
 
 Pass Family Members page
-    Wait Until Page Contains    Family Members    ${APPCONF_LOAD_TIMEOUT}    Family Members screen has not displayed
-    Sleep    3
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain    Family Members    Family members screens has not been displayed
+    Sleep    5
     Execute Javascript    $("[class='buttonNext']").click()
 
 Enter details in Family Members page
     [Arguments]    ${dependentcount}
-    Wait Until Page Contains Element    name=Application.Dependent[0].Last_Name    ${APPCONF_LOAD_TIMEOUT}    Family Members screen has not displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Application.Dependent[0].Last_Name    Family members screens has not been displayed
     :FOR    ${index}    IN RANGE    0    ${dependentcount}
-    \    Input Text    name=Application.Dependent[${index}].Last_Name    ${userLName}
+    \    Input Text    name=Application.Dependent[${index}].Last_Name    ${primaryLName}
     \    Execute Javascript    $("[name='Application.Dependent[${index}].Address_Same_Primary'][value='Yes']").click()
     \    Input Text    name=Application.Dependent[${index}].Ssn    ${SSNcode${index}}
     Execute Javascript    $("[class='buttonNext']").click()
 
 Pass Primary Care Provider page
-    Wait Until Page Contains    Primary Care Provider    ${APPCONF_LOAD_TIMEOUT}    Primary Care Provider screen has not displayed
-    Sleep    3
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Application.Applicant.PCP.Provider_Name    Primary Care Provider screens has not been displayed
+    Sleep    5
     Execute Javascript    $("[class='buttonNext']").click()
 
 Enter details in Prior Coverage page
-    Wait Until Page Contains Element    name=Application.Previous_Members    ${APPCONF_LOAD_TIMEOUT}    Primary Care Provider screen has not displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Application.Previous_Members    Prior Coverage screens has not been displayed
     Select Radio Button    Application.Previous_Members    No
     Execute Javascript    $("[class='buttonNext']").click()
 
 Verify that Plan is selected
     [Arguments]    ${planName}
-    Wait Until Keyword Succeeds    20    2s    Page Should Contain Element    xpath=//div[div[contains(text(),'${planName}')]]//span[text()='Selected Plan']
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    2s    Page Should Contain Element    xpath=//div[div[contains(text(),'${planName}')]]//span[text()='Selected Plan']
 
 Enter details in Current Other Coverage page
     [Arguments]    ${option}=No
@@ -1425,10 +1471,10 @@ Enter details in Current Other Coverage page
     Run Keyword If    '${option}'=='No'    Click Link    Continue
     
 Enter details in Payment Options page
-    Wait Until Page Contains    Payment Options    ${APPCONF_LOAD_TIMEOUT}    Payment Options screen has not displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Application.Payment_Details.Initial_Method    Payment Options screen has not been displayed
     Select From List    name=Application.Payment_Details.Initial_Method    Check
     Wait Until Page Contains Element    name=Application.Initial_Bill.Recipient_Name    10
-    Input Text    name=Application.Initial_Bill.Recipient_Name    ${userFName} ${userLName}
+    Input Text    name=Application.Initial_Bill.Recipient_Name    ${primaryFName} ${primaryLName}
     Input Text    name=Application.Initial_Bill.Billing_Address_1    Addr 12
     Input Text    name=Application.Initial_Bill.Billing_City    Adams
     Select From List    name=Application.Initial_Bill.Billing_State    WI
@@ -1446,29 +1492,30 @@ Enter details in Payment Options page
 #    Click Link    Continue
 
 Pass Verify Application page
-    Wait Until Page Contains    Verify Application    ${APPCONF_LOAD_TIMEOUT}    Verify Application screen has not displayed
+    Wait Until Keyword Succeeds    120    5    Page Should Contain    Verify Application    Verify Application screen has not displayed
     Sleep    3
     Click Link    Next
 
 Pass Authorized Representative page
-    Wait Until Page Contains    Authorized Representative    ${APPCONF_LOAD_TIMEOUT}    Authorized Representative screen has not displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain    Authorized Representative    Authorized Representative screen has not been displayed
     Sleep    3
     Click Link    Next
 
 Enter details in Submit Application on Behalf of Applicant page
-    [Arguments]    ${fname}=${userFName}    ${mname}=${EMPTY}    ${lname}=${userLName}
+#    [Arguments]    ${fname}=${userFName}    ${mname}=${EMPTY}    ${lname}=${userLName}
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    xpath=//input[@name='Application.Signature.First_Name' and not(@disabled)]    Submission screen has not been displayed
 #    ${isApNdisplayed}=    Get Matching Xpath Count     //input[@name='Application.Signature.Incarcerated_Name']
     ${isCNdisplayed}=    Get Matching Xpath Count     //input[@name='Application.Signature.Confirm_First_Name' and not(@disabled)]
     ${isDSdisplayed}=    Get Matching Xpath Count     //input[@name='Application.Dependent[0].Signature.Agreed_To_Terms']
 #    Run Keyword If    '${isApNdisplayed}'=='1'    Select Checkbox    name=Application.Signature.Incarcerated_Name
 #    Select Checkbox    Application.Signature.SBC_Provided
     Select Checkbox    xpath=//input[@name='Application.Signature.Agreed_To_Terms' and not(@disabled)]
-    Input Text    xpath=//input[@name='Application.Signature.First_Name' and not(@disabled)]    ${fname}
-    Input Text    xpath=//input[@name='Application.Signature.Middle_Initial' and not(@disabled)]    ${mname}
-    Input Text    xpath=//input[@name='Application.Signature.Last_Name' and not(@disabled)]    ${lname}
-    Run Keyword If    '${isCNdisplayed}'=='1'    Input Text    xpath=//input[@name='Application.Signature.Confirm_First_Name' and not(@disabled)]    ${fname}
-    Run Keyword If    '${isCNdisplayed}'=='1'    Input Text    xpath=//input[@name='Application.Signature.Confirm_Middle_Initial' and not(@disabled)]    ${mname}
-    Run Keyword If    '${isCNdisplayed}'=='1'    Input Text    xpath=//input[@name='Application.Signature.Confirm_Last_Name' and not(@disabled)]    ${lname}
+    Input Text    xpath=//input[@name='Application.Signature.First_Name' and not(@disabled)]    ${userFName}
+    Input Text    xpath=//input[@name='Application.Signature.Middle_Initial' and not(@disabled)]    ${userMI}
+    Input Text    xpath=//input[@name='Application.Signature.Last_Name' and not(@disabled)]    ${userLName}
+    Run Keyword If    '${isCNdisplayed}'=='1'    Input Text    xpath=//input[@name='Application.Signature.Confirm_First_Name' and not(@disabled)]    ${userFName}
+    Run Keyword If    '${isCNdisplayed}'=='1'    Input Text    xpath=//input[@name='Application.Signature.Confirm_Middle_Initial' and not(@disabled)]    ${userMI}
+    Run Keyword If    '${isCNdisplayed}'=='1'    Input Text    xpath=//input[@name='Application.Signature.Confirm_Last_Name' and not(@disabled)]    ${userLName}
     Run Keyword If    '${isDSdisplayed}'=='1'    Fill Signature for Spouse
     Click Link    Submit Application
 
@@ -1484,9 +1531,9 @@ Fill Signature for Spouse
 #    Wait Until Page Contains Element    Application.Coverage_For    ${SELENIUM_TIMEOUT}    Personal Information screen wasn't displayed
 #    List Selection Should Be    Application.Coverage_For    My Family
 ##    Page Should Contain Element    xpath=//div[(//label[text()='Effective Date']) and (contains(text(),'${eff_date}'))]
-#    Textfield Should Contain    Application.Applicant.First_Name    ${userFName}
-#    Textfield Should Contain    Application.Applicant.Last_Name    ${userLName}
-#    List Selection Should Be    Application.Applicant.State    PA
+#    Textfield Should Contain    Application.Applicant.First_Name    ${primaryFName}
+#    Textfield Should Contain    Application.Applicant.Last_Name    ${primaryLName}
+#    List Selection Should Be    Application.Applicant.State    WI
 #    Element Should Be Disabled        Application.Applicant.State    
 #    Textfield Should Contain    Application.Applicant.Zip    ${zipCode}
 #    Element Should Be Disabled        Application.Applicant.Zip
@@ -1579,12 +1626,12 @@ Fill Signature for Spouse
 #    List Selection Should Be    Application.Dependent[1].Tobacco    ${child1Tobacco}
 #    Run Keyword And Ignore Error    Element Should Be Disabled        Application.Dependent[1].Tobacco
 #
-Enter Legal Guardian Info and update Coverage selection
+${userRole} enters Legal Guardian Info and update Coverage selection
     Select From List    Application.Coverage_For    My Child/Children
     Wait Until Page Contains    For a child-only application,    ${SELENIUM_TIMEOUT}    Child-only text wasn't displayed
     Wait Until Page Contains    Legal Guardian Information    ${SELENIUM_TIMEOUT}    Legal Guardian section wasn't displayed
     Input Text    Application.Applicant.Guardian.First_Name    ${guardianFName}
-    Input Text    Application.Applicant.Guardian.Last_Name    ${userLName}
+    Input Text    Application.Applicant.Guardian.Last_Name    ${primaryLName}
     Select From List    Application.Applicant.Guardian.Relationship    Parent
     Input Text    Application.Applicant.Guardian.Home_Phone    1111111111
     Execute Javascript    $("[name='Application.Applicant.Guardian.Address_Same_Primary'][value='No']").click()
@@ -1592,7 +1639,7 @@ Enter Legal Guardian Info and update Coverage selection
     Input Text    Application.Applicant.Guardian.City    Phila
     Select From List    Application.Applicant.Guardian.State    WI
     Input Text    Application.Applicant.Guardian.Zip    54514
-#    Set Global Variable    ${userFName}    ${guardianFName}
+    Run Keyword If    '${userRole}'=='Consumer'    Set Global Variable    ${userFName}    ${guardianFName}
 #    Input Text    Application.Applicant.First_Name    ${child1FName}
 #    Input Text    Application.Applicant.Last_Name    ${child1LName}
 #    Input Text    Application.Applicant.Dob    09082007
@@ -1622,7 +1669,7 @@ Send & verify Proposal
     Wait For Condition    return $('#popup_ok:visible').size() == 0;    ${SELENIUM_TIMEOUT}
     
 Verify that selected plan is in Cart
-    Wait Until Keyword Succeeds    30    5    Page Should Contain Element    xpath=//div[@id='plans']//*[contains(text(),'${selectedplan}')]
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    xpath=//div[@id='plans']//*[contains(text(),'${selectedplan}')]
 
 #Get all plans on Plan selection screen
 #    Sleep    10
@@ -1675,7 +1722,7 @@ Verify that selected plan is in Cart
 #Enter Payment details for payment method Check
 #    Wait Until Page Contains    Payment Options    ${SELENIUM_TIMEOUT}    Payment Options screen wasn't displayed
 #    Select From List    name=Application.Payment_Details.Initial_Method    Check
-#    Input Text    name=Application.Initial_Bill.Recipient_Name    ${userFName} \ ${userLName}
+#    Input Text    name=Application.Initial_Bill.Recipient_Name    ${primaryFName} \ ${primaryLName}
 #    Input Text    name=Application.Initial_Bill.Billing_Address_1    Street 1 suite 1
 #    Input Text    name=Application.Initial_Bill.Billing_City    Phila
 #    Select From List    name=Application.Initial_Bill.Billing_State    PA
@@ -1685,7 +1732,7 @@ Verify that selected plan is in Cart
 #Enter Payment details for payment method Credit card 
 #    Wait Until Page Contains    Payment Options    ${SELENIUM_TIMEOUT}    Payment Options screen wasn't displayed
 #    Select From List    name=Application.Payment_Details.Initial_Method    Credit Card
-##    Input Text    name=Application.Initial_Bill.Recipient_Name    ${userFName} \ ${userLName}
+##    Input Text    name=Application.Initial_Bill.Recipient_Name    ${primaryFName} \ ${primaryLName}
 ##    Input Text    name=Application.Initial_Bill.Billing_Address_1    Street 1 suite 1
 ##    Input Text    name=Application.Initial_Bill.Billing_City    Phila
 ##    Select From List    name=Application.Initial_Bill.Billing_State    PA
@@ -1728,11 +1775,11 @@ Verify that selected plan is in Cart
 #Complete Terms and Conditions page    
 #    Click Element    name=Application.Signature.SBC_Provided
 #    Click Element    name=Application.Signature.Agreed_To_Terms
-#    Input Text    name=Application.Signature.First_Name    ${userFName}
-#    Input Text    name=Application.Signature.Last_Name    ${userLName}
+#    Input Text    name=Application.Signature.First_Name    ${primaryFName}
+#    Input Text    name=Application.Signature.Last_Name    ${primaryLName}
     
 Wait Confirmation page
-    Wait Until Keyword Succeeds    60    5     Wait Until Page Contains    Application Successfully Submitted!
+    Wait Until Keyword Succeeds    120    5     Page Should Contain    Application Successfully Submitted!    Confirmation screens has not been displayed
 
 Wait a Bit
     Sleep    2s

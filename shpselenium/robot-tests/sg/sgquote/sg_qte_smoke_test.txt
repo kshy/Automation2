@@ -20,8 +20,7 @@ Test Smoke test Quote from case - Broker
     And Wait a Bit
     And Enter details in Create Small Group Case page
     And Wait Until Page Contains    Case Summary - Small Group
-    And Click Link    New Business
-    And Click Button    SG Quote
+    And Starts SG Quote from a case
     And Enter details in Quote Profile page for case    2
     And Enter details in Census page for Employees    2
     And Select Plan By Name    Tradition $500-10%
@@ -34,7 +33,7 @@ Test Smoke test Quote from case - Broker
     Then Page Should Contain    Proposal generation and delivery completed.
     And Click OK in Popup
     And Verify Title    Security Health Plan - Quote Summary
-    Then User Logs out from the application
+    Then Logs out from the application
 
 Test Smoke test Quote - Broker
     [Documentation]    *SG - Quote - Smoke Test: Broker*
@@ -60,5 +59,5 @@ Test Smoke test Quote - Broker
     Then Page Should Contain    Proposal generation and delivery completed.
     And Click OK in Popup
     And Verify Title    Security Health Plan - Quote Summary
-    Then User Logs out from the application
+    Then Logs out from the application
 
