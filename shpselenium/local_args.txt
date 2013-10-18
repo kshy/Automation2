@@ -1,6 +1,6 @@
---variable  HOST:https://securityhealth-stg.healthinsurance-asp.com
+--variable  HOST:http://vshpwksqa01.ct.com/shp/exemplar/Portal.action
 --variable  HOST_EXCL:https://vshpwksuat02.ct.com
---variable  HOST_EXCL:https://shpuat01.connecture.com
+--variable  HOST_EXCL:https://securityhealth-stg.healthinsurance-asp.com
 --variable  CONTEXT_ROOT:/shp
 --variable  BROWSER:ff
 --variable  SELENIUM_TIMEOUT:15

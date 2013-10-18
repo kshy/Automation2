@@ -1,4 +1,4 @@
---variable  HOST:https://vshpwksuat02.ct.com
+--variable  HOST:http://vshpwksqa01.ct.com/shp/exemplar/Portal.action
 --variable  HOST_EXCL:https://vshpwksuat02.ct.com
 --variable  CONTEXT_ROOT:/shp
 --variable  BROWSER:ff
