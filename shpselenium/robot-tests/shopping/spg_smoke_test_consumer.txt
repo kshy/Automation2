@@ -19,7 +19,7 @@ Test Smoke test - Consumer completes shopping - Primary
     
     Given Anonymous User click Find Plan and proceed to Welcome page
     When Proceed to the Demographic page
-    And Enter demographic data for the primary applicant    53910    1    Leonard    12/15/1972    Male    Yes
+    And Enter demographic data for the primary applicant    54635    1    Leonard    12/15/1995    Male    Yes
     And Click Link    Save & Continue
     And Wait Until Keyword Succeeds    60    5    Page Should Contain    How do you want to shop for plans?
     And Click Link    Select Browse
@@ -49,7 +49,7 @@ Test Smoke test - Consumer completes shopping - Primary
     Then Wait Confirmation page
     
     
-Consumer completes shopping - Primary, Spouse, 2 Children
+Consumer completes shopping - Primary, Spouse, 4 Children
     [Documentation]    
     ...
     ...    *User Type:* Consumer (Anonymous user)
@@ -62,13 +62,17 @@ Consumer completes shopping - Primary, Spouse, 2 Children
     When Proceed to the Demographic page
     And Enter demographic data for the primary applicant    53910    1    Brandan    12/15/1972    Male    Yes
     Click Link    Add Dependent
-    And Enter demographic data for dependent    1    Veronica    11/17/1998    Spouse    Female    No
+    And Enter demographic data for dependent    1    Veronica    11/17/1996    Spouse    Female    No
     Click Link    Add Dependent
     And Enter demographic data for dependent    2    Lily    08/31/2013    Child    Female    No
     Click Link    Add Dependent
     And Enter demographic data for dependent    3    Robert    09/01/2009    Child    Male    No
+    Click Link    Add Dependent
+    And Enter demographic data for dependent    4    Barby    08/31/2013    Child    Female    No
+    Click Link    Add Dependent
+    And Enter demographic data for dependent    5    Greg    09/01/2009    Child    Male    No
     And Click Link    Save & Continue
-    And Wait Until Keyword Succeeds    60    5    Page Should Contain    How do you want to shop for plans?
+    And Wait Until Keyword Succeeds    70    5    Page Should Contain    How do you want to shop for plans?
     And Click Link    Select Browse
     And Wait a Bit
     And Switch to small view
@@ -88,13 +92,25 @@ Consumer completes shopping - Primary, Spouse, 2 Children
     And Verify that selected plan is in Cart
     And Click Link    Start Application
     And Enter Primary Applicant details - Consumer    My Family
-    And Enter details in Family Members page   3
+    And Enter details in Family Members page   5
+    And Pass Primary Care Provider page
     And Enter details in Prior Coverage page
     And Enter details in Payment Options page
     And Pass Verify Application page
     And Pass Authorized Representative page
     And Enter details in Submit Application on Behalf of Applicant page
-    Then Wait Confirmation page
+    And Wait Confirmation page
+    And Click Link    Exit Application
+    And Verify Status of application    Admin Review
+    And Logs out from the application
+    And Admin Reviewer logs in to application
+    And Search for case
+    And Open enrollment after search
+    And Assigns application for review on herself
+    And Search for case
+    And Open enrollment after search
+    Then Admin Reviewer approves application
+    
 
 Consumer completes shopping - Child Only
     [Documentation]    
@@ -129,7 +145,7 @@ Consumer completes shopping - Child Only
     And Click Link    Start Application
     And Enter Primary Applicant details - Consumer    My Child
     And Pass Family Members page
-#    And Pass Primary Care Provider page
+    And Pass Primary Care Provider page
     And Enter details in Prior Coverage page
     And Enter details in Payment Options page
 #    And Enter details in Employer Payment Arrangements page

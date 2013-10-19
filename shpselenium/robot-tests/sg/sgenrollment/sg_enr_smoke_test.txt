@@ -257,13 +257,10 @@ Test Smoke test Enrollment - Broker
     And Pass Employee Elections page
     And Pass Rates page
     And Enter details in Generate Proposal page
-    And Enter details in Generate Proposal page
     Then Page Should Contain    Proposal generation and delivery completed.
     And Click OK in Popup
     And Verify Title    Security Health Plan - Enrollment Summary
 
-    
-    
     #Start Acceptance
     And Start Employer Acceptance
     And Unselect Plan By Name    Independence $1,000-20% GOLD

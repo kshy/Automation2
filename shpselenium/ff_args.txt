@@ -1,7 +1,7 @@
---variable  HOST:https://vshpwksuat02.ct.com
+--variable  HOST:http://vshpwksqa01.ct.com
 --variable  HOST_EXCL:https://vshpwksuat02.ct.com
 --variable  CONTEXT_ROOT:/shp
---variable  BROWSER:gc
+--variable  BROWSER:ff
 --variable  SELENIUM_TIMEOUT:15
 --variable  SELENIUM_IMPLICIT_WAIT:2
 --variable  SELENIUM_SPEED:0.5

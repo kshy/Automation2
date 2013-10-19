@@ -58,6 +58,8 @@ Initialize Variables
     ${SSNcode0}=    Generate Random String    9    [NUMBERS]
     ${SSNcode1}=    Generate Random String    9    [NUMBERS]
     ${SSNcode2}=    Generate Random String    9    [NUMBERS]
+    ${SSNcode3}=    Generate Random String    9    [NUMBERS]
+    ${SSNcode4}=    Generate Random String    9    [NUMBERS]
     ${ifpCaseName}=    Catenate    IFPCaseAuto${yyyy}${mm}${dd}${hh}${min}${ss}
     ${userFName}=    Catenate    FN${randStr}
     ${userLName}=    Catenate    LN${randStr}
@@ -86,6 +88,8 @@ Initialize Variables
     Set Test Variable    ${SSNcode0}
     Set Test Variable    ${SSNcode1}
     Set Test Variable    ${SSNcode2}
+    Set Test Variable    ${SSNcode3}
+    Set Test Variable    ${SSNcode4}
     Set Suite Variable    ${fname2}
     Set Suite Variable    ${fname3}
     Set Suite Variable    ${selected_features}
@@ -947,7 +951,7 @@ Add plan to cart
 Add dental rider to plan
 #${dental}   Low    High
     [Arguments]    ${dental}    ${planname}
-    Click Element    xpath=//div[@class='benefit-section Medical' and *[contains(.,'${planname}')]]/following-sibling::div/div[@class='plan-card' and div[contains(text(),'${dental}')]]//a[contains(text(),'Add')]
+    Wait Until Keyword Succeeds    30    5    Click Element    xpath=//div[@class='benefit-section Medical' and *[contains(.,'${planname}')]]/following-sibling::div/div[@class='plan-card' and div[contains(text(),'${dental}')]]//a[contains(text(),'Add')]
 
 Check that added plan is displayed in the cart
     Wait Until Page Contains    Items In Your Cart
@@ -1169,6 +1173,17 @@ Sales Represenative logs in to application
     Set Global Variable    ${userMI}    I
     Set Global Variable    ${userLName}    User
 
+Admin Reviewer logs in to application
+    Click Link    Returning User Login
+    Wait Until Page Contains    Welcome    ${SELENIUM_TIMEOUT}    Welcome screen has not displayed
+    Input Text    name=username    adminreviewuser
+    Input Text    name=password    password
+    Comment    Introduced sleep as per 6.1 maint application behaviour
+    Sleep    2s
+    Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Click Button    name=login.button
+    Wait Until Page Contains    Welcome, Kara AdminReviewer!    ${SELENIUM_TIMEOUT}    Dashboard has not displayed
+
+
 Logs out from the application
     Wait a Bit
     Click Element    xpath=//span[@class="welcomeName"]
@@ -1188,6 +1203,19 @@ Open enrollment after search
     Wait a Bit
     Click Element    xpath=//*[@id='IFPNewBusinessActivities_view_application_button']
 
+Assigns application for review on herself
+    Wait Until Keyword Succeeds    30    5    Page Should Contain   Application Summary    Application wasn't opened after search
+    Click Link    Refer Application
+    Select From List    referActivityInfo.refferedOwnerId    Kara AdminReviewer
+    Click Button    Send
+
+Admin Reviewer approves application
+    Wait Until Keyword Succeeds    30    5    Page Should Contain   Application Summary    Application wasn't opened after search
+    Click Button    Decision
+    Wait Until Keyword Succeeds    30    5    Page Should Contain Element    xpath=//button[contains(text(),'Approve')]    Decision page was not displayed.
+    Click Button    Approve
+    Wait Until Keyword Succeeds    60    5    Page Should Contain Element    xpath=//tr[td[contains(.,'Application Status')]]/td[contains(text(),'Accepted')]    Application was not Accepted or page takes too long to load.
+
 Selects IFP Case
     Wait Until Page Contains    Dashboard    ${SELENIUM_TIMEOUT}
     Execute Javascript    $('#activities').parent().showSuperfishUl()
@@ -1204,6 +1232,7 @@ Start Quote from a case
     Sleep    10
     Click Link    New Business
     Wait Until Keyword Succeeds    30    5    Page Should Contain    Create a Quote
+    Wait a Bit
     ${isFFMon}=    Get Matching Xpath Count     xpath=//a[text()='Traditional Quote']
     Run Keyword If    '${isFFMon}'=='0'    Click Button     Create Quote
     Run Keyword Unless    '${isFFMon}'=='0'    Click Link    Traditional Quote
@@ -1437,7 +1466,7 @@ Enter Primary Applicant details - Consumer
     Execute Javascript    $("[class='buttonNext']").click()
 
 Pass Family Members page
-    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain    Family Members    Family members screens has not been displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain    This application does not include any family members requesting coverage.    Family members screens has not been displayed
     Sleep    5
     Execute Javascript    $("[class='buttonNext']").click()
 
@@ -1464,6 +1493,11 @@ Verify that Plan is selected
     [Arguments]    ${planName}
     Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    2s    Page Should Contain Element    xpath=//div[div[contains(text(),'${planName}')]]//span[text()='Selected Plan']
 
+Verify Status of application
+    [Arguments]    ${status}
+    Wait Until Keyword Succeeds    30    5    Page Should Contain    Account Overview    My Account page wasn't opened
+    Page Should Contain Element    xpath=.//tr[td[contains(text(),'${primaryLName}, ${primaryFName}')]]/td[contains(text(),'${status}')]
+
 Enter details in Current Other Coverage page
     [Arguments]    ${option}=No
     Wait Until Page Contains    Current Other Coverage    ${APPCONF_LOAD_TIMEOUT}    Current Other Coverage screen has not displayed
@@ -1483,7 +1517,7 @@ Enter details in Payment Options page
     #Wait Until Page Contains Element    name=Application.Payment_Details.Frequency_2    10
     #Select From List    name=Application.Payment_Details.Frequency_2    Annually
     #Select Radio Button    Application.Applicant.Billing_Address.Same_As_Primary    Yes
-    Click Link    Next
+    Execute Javascript    $("[class='buttonNext']").click()
     
 #Enter details in Employer Payment Arrangements page
 #    Wait Until Page Contains    Employer Payment Arrangements    ${APPCONF_LOAD_TIMEOUT}    Family Members screen has not displayed
@@ -1494,12 +1528,12 @@ Enter details in Payment Options page
 Pass Verify Application page
     Wait Until Keyword Succeeds    120    5    Page Should Contain    Verify Application    Verify Application screen has not displayed
     Sleep    3
-    Click Link    Next
+    Execute Javascript    $("[class='buttonNext']").click()
 
 Pass Authorized Representative page
-    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain    Authorized Representative    Authorized Representative screen has not been displayed
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    xpath=//a[@class="buttonAddRepeatable"]    Authorized Representative screen has not been displayed
     Sleep    3
-    Click Link    Next
+    Execute Javascript    $("[class='buttonNext']").click()
 
 Enter details in Submit Application on Behalf of Applicant page
 #    [Arguments]    ${fname}=${userFName}    ${mname}=${EMPTY}    ${lname}=${userLName}

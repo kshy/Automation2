@@ -166,7 +166,7 @@ Enter details in General page
     Input Text    name=Enrollment.Employer.Business_Start_Date    012011
     #Select Radio Button    Enrollment.Employer.Comp_Have_Multiple_Loc    No
     Execute Javascript    $("[name='Enrollment.Employer.Comp_Have_Multiple_Loc'][value='No']").click()
-    Select Radio Button    Enrollment.Employer.Comp_Have_Multi_Tax_Id    No
+    Execute Javascript    $("[name='Enrollment.Employer.Comp_Have_Multi_Tax_Id'][value='No']").click()
     Execute Javascript    $('a[class*="buttonNext"]').click()
 
 #Enter details in Eligibility Requirements page
@@ -229,8 +229,8 @@ Enter details in Current Coverage page
     Select Radio Button    Enrollment.Current_Coverage.Replacing_Group_Health_Ins    No
     Select Radio Button    Enrollment.Current_Coverage.Have_Compensation_Carrier    No
     Select Radio Button    Enrollment.Current_Coverage.Any_EE_Not_Covered_Compensation    No
-    Sleep    10
-    Click Link    Next
+    Sleep    30
+    Execute Javascript    $('a[class*="buttonNext"]').click()
 
 Enter details in HRA Contribution page
     Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.HRA_Info.Is_Comp_Offer_HRA    HRA Contribution screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
@@ -278,7 +278,7 @@ Enter details in Signature page
     Run Keyword If    '${signatureConfirmationFirstName}'=='1'    Input Text    xpath=//input[@name="Enrollment.Signature.Confirm_First_Name"]    ${firstName}
     Run Keyword If    '${signatureConfirmationMiddleInitial}'=='1'    Input Text    xpath=//input[@name="Enrollment.Signature.Confirm_Middle_Initial"]    ${middleName}
     Run Keyword If    '${signatureConfirmationLstName}'=='1'    Input Text    xpath=//input[@name="Enrollment.Signature.Confirm_Last_Name"]    ${lastName}
-    Click Link    Submit
+    Execute Javascript    $('a[class*="buttonDone"]').click()
  
 Enter details in Employer's Statement page
     Wait Until Keyword Succeeds    100    5    Page Should Contain Element    name=Enrollment.Signature.ES_First_Name    Employer's Statement screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
@@ -287,8 +287,8 @@ Enter details in Employer's Statement page
     Input Text    name=Enrollment.Signature.ES_Last_Name    Employer
     Input Text    name=Enrollment.Signature.ES_Title    director
     Input Text    name=Enrollment.Signature.ES_Telephone_Number    1234567890
-    Select Checkbox    xpath=//input[@name='Enrollment.Signature.Agreed_To_Terms' and not(@disabled)]
-    Click Link    Next
+    Execute Javascript    document.getElementsByName("Enrollment.Signature.Agreed_To_Terms")[1].checked=true
+    Execute Javascript    $('a[class*="buttonNext"]').click()
 
 Enter details in Certification page
     [Arguments]    ${agentName}    ${agentMI}    ${agentLast}
@@ -311,7 +311,7 @@ Enter details in Certification page
     Input Text    name=Enrollment.Certification.Business_City    Brookfield
     Input Text    name=Enrollment.Certification.Business_Zip    ${sgZip}
     Input Text    name=Enrollment.Certification.Agency_Tel_Number    2255887799
-    Click Link    Submit
+    Execute Javascript    $('a[class*="buttonDone"]').click()
 
 Pass Employer Submission Confirmation page
     Wait Until Keyword Succeeds    60    5    Page Should Contain Element    xpath=//a[contains(text(),'Return to Manage Enrollment')]    Employer Submission Confirmation screen has not been displayed
@@ -464,7 +464,8 @@ Enter details in Employee Information page for Employee
     #    Input Text    name=Enrollment.Employee.DOB    11111980
     Input Text    name=Enrollment.Employee.SSN    ${federalTaxIdEmployee}
     Select Radio Button    Enrollment.Employee.Gender    Male
-    Select Radio Button    Enrollment.Employee.Tobacco    No
+#    Select Radio Button    Enrollment.Employee.Tobacco    No
+    Execute Javascript    $("[name='Enrollment.Employee.Tobacco'][value='No']").click()
     Input Text    name=Enrollment.Employee.Address_1    Mirror ave 1
     Input Text    name=Enrollment.Employee.City    Woodland
 #    Select From List    name=Enrollment.Employee.State    ${stateAbbr}
@@ -770,7 +771,9 @@ Generate Date
     [Return]    ${date}
 
 Get site
-    [Return]    ${HOST}${CONTEXT_ROOT}/exemplar/Portal.action
+    ${url}=    Set Variable    ${HOST}${CONTEXT_ROOT}/exemplar/Portal.action
+    Log    URL:${url}    WARN
+    [Return]    ${url}
 
 Initialize Variables
     ${reqstdEffDate}=    Generate Date
@@ -953,6 +956,7 @@ Enter details in Generate Proposal page
     #Q
     Select Checkbox    name=emailOther
     Input Text    name=emailOtherAddress    ${employerEmail}
+    Input Text    name=messageText    This is Smal Group Proposal.
     Click Button    Send Proposal
     
 Click OK in Popup
