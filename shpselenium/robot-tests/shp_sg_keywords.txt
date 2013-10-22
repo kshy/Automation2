@@ -781,7 +781,7 @@ Initialize Variables
     ${randNbr}=    Generate Random String    6    [NUMBERS]
     ${ifpCaseName}=    Catenate    IFPCase${randNbr}
     ${email}=    Set Variable    tvolovik@connecture.com
-    ${emailPwd}=    Set Variable    ct123qwe
+    ${emailPwd}=    Set Variable    Secur1ty_Auto
     ${userName}=    Catenate    User${randNbr}
     ${emailConsumer}=    Catenate    ${userName}@test.com
     ${userFName}=    Generate Random String    6    [UPPER]
@@ -803,7 +803,7 @@ Initialize Variables
     ${sgCaseName}=    Catenate    SGCaseAuto${yyyy}${mm}${dd}${hh}${min}${ss}
     #${sgCaseName}=    Set Variable    SGCase20130717a
     ${stateAbbr}=    Set Variable    WI
-    ${sgZip}=    Set Variable    53910
+    ${sgZip}=    Set Variable    54401
     ${sicCode}=    Set Variable    1222
     ${federalTaxId}=    Generate Random String    9    [NUMBERS]
     ${federalTaxIdEmployee}=    Generate Random String    9    [NUMBERS]
@@ -812,8 +812,8 @@ Initialize Variables
     ${employeeName2}=    Generate Random String    6    [UPPER]
     ${employeeName3}=    Generate Random String    6    [UPPER]
     ${employeeName4}=    Generate Random String    6    [UPPER]
-    ${employeeEmail}=    Set Variable    tvolovik@connecture.com
-    ${employerEmail}=    Set Variable    tvolovik@connecture.com
+    ${employeeEmail}=    Set Variable    tvolvk.test@gmail.com
+    ${employerEmail}=    Set Variable    tvolvk.test@gmail.com
     ${sgReqstdEffDate}=    Generate Date
     ${randStr}=    Generate Random String    6    [UPPER]
     ${employerName}=     Catenate    John${randStr}
@@ -870,6 +870,12 @@ Initialize Variables
     Set Test Variable    ${listOfPlans}
     Sleep    2s
     Navigate To
+
+    
+Go to the Rates page if not a new qa env
+    Pass Plan Offering Options page
+    Pass Plans page
+    Pass Employee Elections page
 
 Login Gmail
     Go To    http://gmail.com/

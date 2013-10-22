@@ -65,6 +65,7 @@ Test Smoke test Enrollment from case - Broker
     And Pass Start Employee Enrollment page
     
     #Employee 1
+    And Wait a Bit
     And Start Enrollment for Employee    1
     And Pass Prior to Applying page
     And Enter details in Employee Information page for Employee    1
@@ -81,6 +82,7 @@ Test Smoke test Enrollment from case - Broker
     And Pass Employee Submission Confirmation page
     
     #Employee 2
+    And Wait a Bit
     And Start Enrollment for Employee    2
     And Pass Prior to Applying page
     And Enter details in Employee Information page for Employee    2
@@ -124,9 +126,8 @@ Test Smoke test Enrollment from case - Broker
     
     #Start Acceptance
     And Start Employer Acceptance
-    And Unselect Plan By Name    Tradition $500-10% PLATINUM
-    And Unselect Plan By Name    Independence $2,000-10% HDHP SILVER
-    And Click Button     Continue
+    And Wait a Bit
+    Run Keyword Unless    '${HOST}'=='http://qashp.ct.com:8080'    Click Button    Continue
     And Enter details in Acceptance options page
     And Pass Start Employer Acceptance page
     And Click Button    Close
@@ -193,6 +194,7 @@ Test Smoke test Enrollment - Broker
     And Pass Start Employee Enrollment page
     
     #Employee 1
+    And Wait a Bit
     And Start Enrollment for Employee    1
     And Pass Prior to Applying page
     And Enter details in Employee Information page for Employee    1
@@ -209,6 +211,7 @@ Test Smoke test Enrollment - Broker
     And Pass Employee Submission Confirmation page
     
     #Employee 2
+    And Wait a Bit
     And Start Enrollment for Employee    2
     And Pass Prior to Applying page
     And Enter details in Employee Information page for Employee    2
@@ -252,9 +255,7 @@ Test Smoke test Enrollment - Broker
     
     #Start Final Proposal
     And Click Button    Start Final Proposal
-    And Pass Plan Offering Options page
-    And Pass Plans page
-    And Pass Employee Elections page
+    Run Keyword Unless    '${HOST}'=='http://qashp.ct.com:8080'     Go to the Rates page if not a new qa env
     And Pass Rates page
     And Enter details in Generate Proposal page
     Then Page Should Contain    Proposal generation and delivery completed.
@@ -263,8 +264,7 @@ Test Smoke test Enrollment - Broker
 
     #Start Acceptance
     And Start Employer Acceptance
-    And Unselect Plan By Name    Independence $1,000-20% GOLD
-    And Click Button     Continue
+    Run Keyword Unless    '${HOST}'=='http://qashp.ct.com:8080'    Click Button    Continue
     And Enter details in Acceptance options page    paper
     And Pass Start Employer Acceptance page
     And Pass Employer Demographics page

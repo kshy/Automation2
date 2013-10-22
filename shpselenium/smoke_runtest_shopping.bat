@@ -18,5 +18,6 @@ python -m robot.run -A chrome_args.txt --include shoppingANDagent --exclude draf
 ::python -m robot.run -A chrome_args.txt --test "Producer completes shopping - Family of 4" --loglevel TRACE --outputdir "Reports\shopping" robot-tests\shopping
 ::python -m robot.run -A chrome_args.txt --test "Producer sends proposal and completes shopping - Child Only" --loglevel TRACE --outputdir "Reports\shopping\2" robot-tests\shopping
 ::python -m robot.run -A chrome_args.txt --test "Sales starts application and forward it to consumer - Primary" --loglevel TRACE --outputdir "Reports\shopping" robot-tests\shopping
+::python -m robot.run -A chrome_args.txt --test "Consumer completes shopping - Primary, Spouse, 4 Children" --loglevel TRACE --outputdir "Reports\shopping" robot-tests\shopping
 ::
 ::python -m robot.run -A local_args.txt src/test/resources/
