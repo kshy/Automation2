@@ -1289,7 +1289,7 @@ Enter details in Forward app to agent
 
 Forward application to ${userRole}
     #${userRole}    consumer    agent
-    Sleep    15
+    Sleep    30
     Execute Javascript    $("[class='buttonForward']").click()
     Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    3s    Page Should Contain    Are you sure you want to forward this application?
     Click Element    xpath=//*[@id='popup_ok']
@@ -1318,6 +1318,8 @@ Login Gmail
     Input Text    name=Email    ${email}
     Input Text    name=Passwd    ${emailPwd}
     Click Button    name=signIn
+    ${isSpamPageDisplayed}=    Get Matching Xpath Count    xpath=//*[@value='Skip for now']
+    Run Keyword Unless    '${isSpamPageDisplayed}'=='0'    Click Element    xpath=//*[@value='Skip for now']
     Wait Until Keyword Succeeds    120s    2s    Page Should Contain    Inbox
     
 
@@ -1487,6 +1489,7 @@ Pass Primary Care Provider page
 Enter details in Prior Coverage page
     Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Application.Previous_Members    Prior Coverage screens has not been displayed
     Select Radio Button    Application.Previous_Members    No
+    Wait a Bit
     Execute Javascript    $("[class='buttonNext']").click()
 
 Verify that Plan is selected
@@ -1513,6 +1516,7 @@ Enter details in Payment Options page
     Input Text    name=Application.Initial_Bill.Billing_City    Adams
     Select From List    name=Application.Initial_Bill.Billing_State    WI
     Input Text    name=Application.Initial_Bill.Billing_Zip    53910
+    Wait a Bit
     #Select From List     name=Application.Payment_Details.Ongoing_Method    Direct Bill
     #Wait Until Page Contains Element    name=Application.Payment_Details.Frequency_2    10
     #Select From List    name=Application.Payment_Details.Frequency_2    Annually
