@@ -14,11 +14,12 @@ Test Smoke test SG Quote-Enroll - Broker
     ...
     ...    *User Type:* Broker
     ...
-    [Tags]    draft
-    Given Broker logs in to application
+    [Tags]    sg    enrollment    quote    smoke     short
+    Given Max Broker logs in to application
     When Selects SG Quote
-    And Enter details in Enrollment Set-Up page    15
-    And Enter details in Census page through Import file    Census_09112013_1.xls
+    And Enter details in Enrollment Set-Up page    50
+    And Run Keyword If    '${HOST}' in 'https://securityhealth-stg.healthinsurance-asp.com' 'https://shpuat01.connecture.com' 'http://qashp.ct.com:8080'    Enter details in Census page through Import file    Census_50Employees_stg.xls
+    And Run Keyword Unless    '${HOST}' in 'https://securityhealth-stg.healthinsurance-asp.com' 'https://shpuat01.connecture.com' 'http://qashp.ct.com:8080'    Enter details in Census page through Import file    Census_50Employees_nonstg.xls
     And Select Plan By Name    Tradition $500-10%
     And Select Plan By Name    Independence $1,000-20%
     And Select Plan By Name    Independence $2,000-10% HDHP
@@ -36,14 +37,16 @@ Test Smoke test SG Quote-Enroll - Broker
     And Select Plan By Name on Select Plans page    Tradition $500-10%
     And Select Plan By Name on Select Plans page    Independence $2,000-10% HDHP SILVER
     And Click Button   Continue
-    And Pass Verify Census page
+    And Run Keyword If    '${HOST}' in 'https://securityhealth-stg.healthinsurance-asp.com' 'https://shpuat01.connecture.com' 'http://qashp.ct.com:8080'    Enter details in Census page through Import file    Census_50Employees_stg.xls
+    And Run Keyword Unless    '${HOST}' in 'https://securityhealth-stg.healthinsurance-asp.com' 'https://shpuat01.connecture.com' 'http://qashp.ct.com:8080'    Enter details in Census page through Import file    Census_50Employees_nonstg.xls
     And Select type in Apply Options page    paper
-    And Enter details in Start Employer Enrollment page     Bob    B    Broker
+    And Enter details in Start Employer Enrollment page
     #Employer Application
     And Click Button    Complete Application
-    And Enter details in Small Employer Disclosure    Bob    B    Broker
+    And Enter details in Small Employer Disclosure
+#    Bob    B    Broker
     And Enter details in General page
-    And Enter details in Eligibility page    2
+    And Enter details in Eligibility page    50
     And Enter details in Continuation/Disability page
     And Enter details in Health Plan Information
     And Enter details in HRA Contribution page
@@ -53,7 +56,8 @@ Test Smoke test SG Quote-Enroll - Broker
     And Enter details in Current Coverage page
     And Pass Application Summary page
     And Enter details in Employer's Statement page
-    And Enter details in Certification page    Bob    B    Broker
+    And Enter details in Certification page
+#    Bob    B    Broker
     And Pass Employer Submission Confirmation page
     #Start Employee Enrollment Process    
     And Click Button    Start Enrollment

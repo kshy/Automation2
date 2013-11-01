@@ -19,7 +19,36 @@ Broker logs in to application
     Sleep    2s
     Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Click Button    name=login.button
     Wait Until Page Contains    Welcome, Bob Broker!    ${SELENIUM_TIMEOUT}    Dashboard has not displayed
-#    Wait Until Page Contains    Welcome, shah broker!    ${SELENIUM_TIMEOUT}    Dashboard has not displayed
+    Set Global Variable    ${userFName}    Bob
+    Set Global Variable    ${userMI}    B
+    Set Global Variable    ${userLName}    Broker
+
+Shah Broker logs in to application
+    Click Link    Returning User Login
+    Wait Until Page Contains    Welcome    ${SELENIUM_TIMEOUT}    Welcome screen has not displayed
+    Input Text    name=username    shahbroker
+    Input Text    name=password    password
+    Comment    Introduced sleep as per 6.1 maint application behaviour
+    Sleep    2s
+    Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Click Button    name=login.button
+    Wait Until Page Contains    Welcome, Shah Broker!    ${SELENIUM_TIMEOUT}    Dashboard has not displayed
+    Set Global Variable    ${userFName}    Shah
+    Set Global Variable    ${userMI}    ${EMPTY}
+    Set Global Variable    ${userLName}    Broker
+
+Max Broker logs in to application
+    Click Link    Returning User Login
+    Wait Until Page Contains    Welcome    ${SELENIUM_TIMEOUT}    Welcome screen has not displayed
+    Input Text    name=username    maxbroker
+    Run Keyword If    '${HOST}'=='https://securityhealth-stg.healthinsurance-asp.com'    Input Text    name=password    password1
+    Run Keyword Unless    '${HOST}'=='https://securityhealth-stg.healthinsurance-asp.com'    Input Text    name=password    password
+    Comment    Introduced sleep as per 6.1 maint application behaviour
+    Sleep    2s
+    Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Click Button    name=login.button
+    Wait Until Page Contains    Welcome, max broker!    ${SELENIUM_TIMEOUT}    Dashboard has not displayed
+    Set Global Variable    ${userFName}    max
+    Set Global Variable    ${userMI}    ${EMPTY}
+    Set Global Variable    ${userLName}    broker
 
 Enter details in Enrollment Set-Up page
     [Documentation]    Use ${userType}='UW' for underwriter
@@ -150,7 +179,7 @@ Start Employer Acceptance
     Wait Until Keyword Succeeds    30    5    Click Button    Start Acceptance
 
 Start Employee Election
-    Wait Until Keyword Succeeds    30    5    Page Should Contain    Enrollment Summary    Enrollment Summary page has not been displayed
+    Wait Until Keyword Succeeds    45    5    Page Should Contain    Enrollment Summary    Enrollment Summary page has not been displayed
     Wait Until Keyword Succeeds    30    5    Click Button    View Elections
 
 
@@ -243,7 +272,7 @@ Enter details in HSA Contribution page
     Click Link    Next
 
 Enter details in Small Employer Disclosure
-    [Arguments]    ${agentName}    ${agentMI}    ${agentLast}
+    [Arguments]    ${agentName}=${userFName}    ${agentMI}=${userMI}    ${agentLast}=${userLName}
     Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.Disclosure.Agreed_To_Certify    Small Employer Disclosure screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Click Element    xpath=//input[@name='Enrollment.Disclosure.Agreed_To_Certify' and not(@disabled)]
     Input Text    name=Enrollment.Disclosure.First_Name    ${agentName}
@@ -260,7 +289,7 @@ Enter details in Small Employer Disclosure
 #    Click Link    Next
 
 Enter details in Signature page
-    [Arguments]    ${firstName}    ${middleName}    ${lastName}
+    [Arguments]    ${firstName}=${userFName}    ${middleName}=${userMI}    ${lastName}=${userLName}
     Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.Signature.First_Name    Signature screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     #Sleep    3
     ${isBrokerAgreeDisplayed}=    Get Matching Xpath Count     //input[@name="Enrollment.Signature.Agreed_To_Terms"]
@@ -291,7 +320,7 @@ Enter details in Employer's Statement page
     Execute Javascript    $('a[class*="buttonNext"]').click()
 
 Enter details in Certification page
-    [Arguments]    ${agentName}    ${agentMI}    ${agentLast}
+    [Arguments]    ${agentName}=${userFName}    ${agentMI}=${userMI}    ${agentLast}=${userLName}
     Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.Certification.Cov_Made_By    Certification screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Wait a Bit
     Execute Javascript     $("[name='Enrollment.Certification.Cov_Made_By']").val('${employerName} Employer')
@@ -330,7 +359,7 @@ Pass Start Employee Enrollment Page
     Click Element    xpath=//button[contains(text(),'Start Enrollment')]
 
 Pass Employee Submission Confirmation page
-    Wait Until Keyword Succeeds    60    5    Page Should Contain Element    xpath=//a[contains(text(),'Return to Manage Enrollment')]    Employee Submission Confirmation screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Wait Until Keyword Succeeds    80    5    Page Should Contain Element    xpath=//a[contains(text(),'Return to Manage Enrollment')]    Employee Submission Confirmation screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Sleep    3
     Click Link    Return to Manage Enrollment
 
@@ -381,12 +410,13 @@ Pass Application Summary page
     Wait Until Keyword Succeeds    60    5    Execute Javascript    $('a[class*="buttonNext"]').click()
     
 Pass Prior to Applying page
-    Wait Until Keyword Succeeds    60    5    Page Should Contain Element    name=Enrollment.Waive_All_Coverage    ${APPCONF_LOAD_TIMEOUT}
-    Select Radio Button    Enrollment.Waive_All_Coverage    No
+    [Arguments]    ${waive}=No
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.Waive_All_Coverage    Prior to Applying page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Select Radio Button    Enrollment.Waive_All_Coverage    ${waive}
     Click Element    xpath=//a[contains(text(),'Start Application')] 
     
 Enter details in Start Employer Enrollment page
-    [Arguments]    ${agentName}    ${agentMI}    ${agentLast}
+    [Arguments]    ${agentName}=${userFName}    ${agentMI}=${userMI}    ${agentLast}=${userLName}
     Wait Until Page Contains Element    name=agentAgreeToCert    ${APPCONF_LOAD_TIMEOUT}     Page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Select Checkbox    name=agentAgreeToCert
     Input Text     name=questions['agentDiscFirstName'].response.text    ${agentName}
@@ -409,6 +439,21 @@ Enter details in Employer Representative page
 Start Enrollment for Employee
     [Arguments]    ${employeeNumber}
     Click Element    xpath=//tr[td[contains(.,'${employeeName${employeeNumber}}')]]//button[contains(@value,'Start')]
+
+Exclude Employee
+    [Arguments]    ${employeeNumber}    ${reason}
+    Click Element    xpath=//tr[td[contains(.,'${employeeName${employeeNumber}}')]]//*[@name='excludeFlag']
+    Select From List    name=excludeEmployee.excludeReason.excludeReasonId    ${reason}
+    Run Keyword If     '${reason}'=='Other'    Input Text    name=exclusionReasonNote    Some reason
+    Click Button    Save
+    Wait Until Keyword Succeeds    60    5    Checkbox Should Be Selected    xpath=//tr[td[contains(.,'${employeeName${employeeNumber}}')]]//*[@name='excludeFlag']
+
+Close Employee Enrollment
+    Wait Until Keyword Succeeds    60    5    Click Link     Manage Employees
+    Wait a Bit
+    Wait Until Keyword Succeeds    60    5    Click Button    Close Enrollment
+    Wait Until Keyword Succeeds    60    5    Page Should Contain    Close Employee Enrollment Confirmation
+    Click Button     Yes
 
 View Enrollment for Employee
     [Arguments]    ${employeeNumber}
@@ -459,7 +504,6 @@ Enter details in Employee Information page for Employee
     [Arguments]    ${employeeNumber}
     Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.Employee.First_Name    Employee Information screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Input Text    name=Enrollment.Employee.Middle_Initial    M
-#Here is a known issue with the Last Name field, it doesn't allow spaces
     Input Text    name=Enrollment.Employee.Last_Name    Bon Jovi
     #    Input Text    name=Enrollment.Employee.DOB    11111980
     Input Text    name=Enrollment.Employee.SSN    ${federalTaxIdEmployee}
@@ -471,7 +515,7 @@ Enter details in Employee Information page for Employee
 #    Select From List    name=Enrollment.Employee.State    ${stateAbbr}
     Input Text    name=Enrollment.Employee.ZIP    ${sgZip}
     Input Text    name=Enrollment.Employee.Home_Phone    1231231234
-#    Input Text    name=Enrollment.Employee.Email    ${employeeEmail}
+    #Input Text    name=Enrollment.Employee.Email    ${employeeEmail}
     Sleep    2
     Input Text    name=Enrollment.Employee.Date_of_Hire    01012000
     Input Text    name=Enrollment.Employee.Hours_per_Week    40
@@ -486,6 +530,11 @@ Enter details in Employee Information page for Employee
     #Click Link    Next
     Execute Javascript    $('a[class*="buttonNext"]').click()
     
+Pass Employee Information page
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.Employee.First_Name    Employee Information screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Sleep    5s
+    Execute Javascript    $('a[class*="buttonNext"]').click()
+
 Select Plan in Coverage Selection page
     [Arguments]    ${desiredPlan}
     Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    xpath=//tr[td/a[contains(text(),'${desiredPlan}')]]//a[contains(text(),'Select Plan')]
@@ -499,6 +548,16 @@ Pass Waiver page
     Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain    Waiving for myself    Waiver screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Sleep    3
     Click Link    Next
+    
+Enter details in Waiver page
+    Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    xpath=//*[@name='Enrollment.Employee.Waiver.Not_Want_Health_Cov']    Waiver screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
+    Select Radio Button    Enrollment.Employee.Waiver.Not_Want_Health_Cov    Waiving for myself
+    Select Checkbox    name=Enrollment.Employee.Waiver.Reason_Other
+    Input Text    name=Enrollment.Employee.Waiver.Reason_Other_Exp    Waiving reason
+    Select Checkbox    name=Enrollment.Employee.Waiver.Terms_Cond
+    Sleep    5s
+    Click Link    Next
+
 
 Enter details in Other Coverage Information page
     Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    5    Page Should Contain Element    name=Enrollment.Other_Coverage.Med_A_Coverage    Other Coverage Information screen takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
@@ -615,7 +674,7 @@ Pass Employer Acceptance Summary
     Click Link    Next
     
 Enter details in Employer Acceptance Signature page
-    [Arguments]    ${agentName}    ${agentMI}    ${agentLast}
+    [Arguments]    ${agentName}=${userFName}    ${agentMI}=${userMI}    ${agentLast}=${userLName}
     Wait Until Keyword Succeeds    120    5    Page Should Contain Element    name=Enrollment.Non_Employer_Acpt_Signature.Agreed_To_Terms     Employer Acceptance Signature page takes more than ${APPCONF_LOAD_TIMEOUT} to load or wrong page displayed
     Select Checkbox    name=Enrollment.Non_Employer_Acpt_Signature.Agreed_To_Terms
     Input Text    name=Enrollment.Non_Employer_Acpt_Signature.Employer_First_Name    ${employerName}
@@ -824,7 +883,9 @@ Initialize Variables
     #${sgPlan1}=    Set Variable    akcttest@gmail.com
     #${sgPlan2}=    Set Variable    akcttest@gmail.com
     #${sgPlan3}=    Set Variable    akcttest@gmail.com
-    
+    ${userFName}=    Set Variable    Bob
+    ${userMI}=    Set Variable    B
+    ${userLName}=    Set Variable    Broker
     ${listOfPlans}=    Create List
     
     
@@ -868,6 +929,9 @@ Initialize Variables
     #Set Test Variable    ${sgPlan2}
     #Set Test Variable    ${sgPlan3}
     Set Test Variable    ${listOfPlans}
+    Set Suite Variable    ${userFName}
+    Set Suite Variable    ${userMI}
+    Set Suite Variable    ${userLName}
     Sleep    2s
     Navigate To
 
@@ -1011,7 +1075,8 @@ UW Manager logs in to application
     Click Link    Returning User Login
     Wait Until Page Contains    Welcome    ${SELENIUM_TIMEOUT}    Welcome screen has not displayed
     Input Text    name=username    mruwmanager
-    Input Text    name=password    password
+    Run Keyword If    '${HOST}'=='https://securityhealth-stg.healthinsurance-asp.com'    Input Text    name=password    password1
+    Run Keyword Unless    '${HOST}'=='https://securityhealth-stg.healthinsurance-asp.com'    Input Text    name=password    password
     Comment    Introduced sleep as per 6.1 maint application behaviour
     Sleep    2s
     Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Click Button    name=login.button

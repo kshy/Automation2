@@ -16,17 +16,18 @@ Test Smoke test - Producer sends proposal and completes shopping - Primary
     ...
     [Tags]    shopping    smoke     short    agent
     
-    Given Shah Broker logs in to application
+    Given Max Broker logs in to application
     When Selects IFP Case
     And Enter details in Create IFP Case page   Albert    53910
     And Wait Until Case Summary - Individual page is opened
     And Start Quote from a case
     And Proceed to the Demographic page
-    And Enter demographic data for the primary applicant    53910    1    Albert    01/01/1985    Male    Yes
+    And Enter demographic data for the primary applicant    54401    1    Albert    01/01/1985    Male    Yes
     And Click Link    Save & Continue
-    And Wait Until Keyword Succeeds    60    5    Page Should Contain    How do you want to shop for plans?
+    And Wait Until Keyword Succeeds    90    5    Page Should Contain    How do you want to shop for plans?
     And Click Link    Select Browse
     And Switch to small view
+    And Change plan display on page to    24
     And Click Add to Quote for plan    Classic $5,500 HDHP
     And Click Add to Quote for plan    Classic $1,000-20%
     And Click Add to Quote for plan    Classic $2,000-30%
@@ -53,6 +54,8 @@ Test Smoke test - Producer sends proposal and completes shopping - Primary
     And Pass Verify Application page
     And Enter details in Submit Application on Behalf of Applicant page
     Then Wait Confirmation page
+    And Click Link    Exit Application
+    And Verify Status of application as Producer    Accepted
 
 Producer completes shopping - Primary
     [Documentation]    
@@ -63,7 +66,7 @@ Producer completes shopping - Primary
     ...
     [Tags]    shopping    smoke     long    agent
     
-    Given Shah Broker logs in to application
+    Given Max Broker logs in to application
     When Selects IFP Case
     And Enter details in Create IFP Case page   Norman    53910
     And Wait Until Case Summary - Individual page is opened
@@ -71,9 +74,10 @@ Producer completes shopping - Primary
     Proceed to the Demographic page
     And Enter demographic data for the primary applicant    53910    1    Norman    02/15/1990    Male    No
     And Click Link    Save & Continue
-    And Wait Until Keyword Succeeds    60    5    Page Should Contain    How do you want to shop for plans?
+    And Wait Until Keyword Succeeds    90    5    Page Should Contain    How do you want to shop for plans?
     And Click Link    Select Browse
     And Switch to small view
+    And Change plan display on page to    24
     And Click Add to Cart for plan    Classic $3,000 HDHP
     And Wait Until Page Contains    1 Plan Added to Cart
     And Wait a Bit
@@ -93,6 +97,8 @@ Producer completes shopping - Primary
     And Pass Verify Application page
     And Enter details in Submit Application on Behalf of Applicant page
     Then Wait Confirmation page
+    And Click Link    Exit Application
+    And Verify Status of application as Producer    Accepted
 
 Producer completes shopping - Family of 4
     [Documentation]    
@@ -103,7 +109,7 @@ Producer completes shopping - Family of 4
     ...
     [Tags]    shopping    smoke     long    agent
     
-    Given Shah Broker logs in to application
+    Given Max Broker logs in to application
     When Selects IFP Quoting
     And Proceed to the Demographic page
     And Enter demographic data for the primary applicant    54805    1    Felix    12/31/1980    Male    Yes
@@ -114,9 +120,10 @@ Producer completes shopping - Family of 4
     Click Link    Add Dependent
     And Enter demographic data for dependent    3    Kelvin    04/29/2013    Child    Male    No
     And Click Link    Save & Continue
-    And Wait Until Keyword Succeeds    60    5    Page Should Contain    How do you want to shop for plans?
+    And Wait Until Keyword Succeeds    90    5    Page Should Contain    How do you want to shop for plans?
     And Click Link    Select Browse
     And Switch to small view
+    And Change plan display on page to    24
     And Click Add to Cart for plan    Classic $1,800-20%
     And Wait Until Page Contains    1 Plan Added to Cart
     And Wait a Bit
@@ -139,6 +146,8 @@ Producer completes shopping - Family of 4
     And Pass Verify Application page
     And Enter details in Submit Application on Behalf of Applicant page
     Then Wait Confirmation page
+    And Click Link    Exit Application
+    And Verify Status of application as Producer    Accepted
 
 Producer sends proposal and completes shopping - Child Only
     [Documentation]    
@@ -149,14 +158,14 @@ Producer sends proposal and completes shopping - Child Only
     ...
     [Tags]    shopping    smoke    agent
     
-    Given Shah Broker logs in to application
+    Given Max Broker logs in to application
     When Selects IFP Quoting
     And Proceed to the Demographic page
     And Enter demographic data for the primary applicant    54805    1    Victor    04/22/2012    Male    No
     Click Link    Add Dependent
     And Enter demographic data for dependent    1    Amanda    06/12/1999    Child    Female    No
     And Click Link    Save & Continue
-    And Wait Until Keyword Succeeds    60    5    Page Should Contain    How do you want to shop for plans?
+    And Wait Until Keyword Succeeds    90    5    Page Should Contain    How do you want to shop for plans?
     And Click Link    Select Browse
     And Switch to small view
     And Change plan display on page to    24
@@ -189,6 +198,16 @@ Producer sends proposal and completes shopping - Child Only
     And Pass Verify Application page
     And Enter details in Submit Application on Behalf of Applicant page
     Then Wait Confirmation page
+    And Click Link    Exit Application
+    And Verify Status of application as Producer    Admin Review
+    And Logs out from the application
+    And Admin Reviewer logs in to application
+    And Search for case
+    And Open enrollment after search
+    And Assigns application for review on herself
+    And Search for case
+    And Open enrollment after search
+    Then Admin Reviewer approves application
 
 Sales starts application and forward it to consumer - Primary
     [Documentation]    
@@ -204,7 +223,7 @@ Sales starts application and forward it to consumer - Primary
     And Proceed to the Demographic page
     And Enter demographic data for the primary applicant    53910    1    Barbara    04/29/1995    Female    No
     And Click Link    Save & Continue
-    And Wait Until Keyword Succeeds    60    5    Page Should Contain    How do you want to shop for plans?
+    And Wait Until Keyword Succeeds    90    5    Page Should Contain    How do you want to shop for plans?
     And Click Link    Select Browse
     And Wait a Bit
     And Switch to small view
@@ -251,3 +270,5 @@ Sales starts application and forward it to consumer - Primary
     And Pass Authorized Representative page
     And Enter details in Submit Application on Behalf of Applicant page
     Then Wait Confirmation page
+    And Click Link    Exit Application
+    And Verify Status of application - consumer    Accepted

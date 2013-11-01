@@ -1,8 +1,8 @@
---variable  HOST:http://vshpwksqa01.ct.com
+--variable  HOST:http://qashp.ct.com:8080
 --variable  HOST_EXCL:https://vshpwksuat02.ct.com
 --variable  HOST_EXCL:https://shpuat01.connecture.com
 --variable  CONTEXT_ROOT:/shp
---variable  BROWSER:ff
+--variable  BROWSER:gc
 --variable  SELENIUM_TIMEOUT:15
 --variable  SELENIUM_IMPLICIT_WAIT:2
 --variable  SELENIUM_SPEED:0.5

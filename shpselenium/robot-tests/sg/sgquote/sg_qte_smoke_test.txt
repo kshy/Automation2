@@ -15,7 +15,7 @@ Test Smoke test Quote from case - Broker
     ...    *User Type:* Broker
     ...
     [Tags]    sg    quote    smoke     short
-    Given Broker logs in to application
+    Given Max Broker logs in to application
     When Selects SG Case
     And Wait a Bit
     And Enter details in Create Small Group Case page
@@ -43,7 +43,7 @@ Test Smoke test Quote - Broker
     ...    *User Type:* Broker
     ...
     [Tags]    sg    quote    smoke     long
-    Given Broker logs in to application
+    Given Max Broker logs in to application
     When Selects SG Quote
     And Enter details in Enrollment Set-Up page    2
     And Enter details in Census page for Employees    2

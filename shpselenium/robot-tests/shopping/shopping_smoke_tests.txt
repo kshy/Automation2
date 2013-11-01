@@ -9,7 +9,7 @@ Resource          ifpshopping_keywords.txt
 *** Test Cases ***
 Test Anonymous SHOP Flow - Select Check Now And Seek Guidance
     [Documentation]    *Test Objective*: The purpose is to verify IFP Shopping flow when Anonymous user check the eligibility and seek guidance, see available plans and then add to cart and verify decide & enroll screen.
-    [Tags]    smoke
+    [Tags]    smoke    draft
     Given A Consumer
     When SHOP On Checking The Eligibility and Taking Guidance
     Then Plans Can Be Viewed And Added To Shopping Cart
@@ -23,7 +23,7 @@ Test Anonymous SHOP Flow - Select Shop Plans And Browse All Plans
 
 Test Agent SHOP Flow - Select Check Now And Seek Guidance
     [Documentation]    *Test Objective*: The purpose is to verify IFP Shopping flow when Agent check the eligibility and seek guidance, see available plans and then add to cart and verify decide & enroll screen.
-    [Tags]    smoke
+    [Tags]    smoke    draft
     Given A Agent
     When SHOP On Checking The Eligibility and Taking Guidance
     Then Plans Can Be Viewed And Added To Shopping Cart

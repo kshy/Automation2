@@ -15,7 +15,7 @@ Test Smoke test Enrollment from case - Broker
     ...    *User Type:* Broker
     ...
     [Tags]    sg    enrollment    smoke     short
-    Given Broker logs in to application
+    Given Max Broker logs in to application
     When Selects SG Case
     And Wait a Bit
     And Enter details in Create Small Group Case page
@@ -28,7 +28,8 @@ Test Smoke test Enrollment from case - Broker
     And Enter details in Census page for Employees    2
     And Select type in Apply Options page    online
     And Enter details in Employer Representative page
-    And Enter details in Start Employer Enrollment page     Bob    B    Broker
+    And Enter details in Start Employer Enrollment page
+#    Bob    B    Broker
     
     #Update Plan Offering
     And Start Update Plan Offering
@@ -46,7 +47,8 @@ Test Smoke test Enrollment from case - Broker
     
     #Employer Application
     And Start Employer application
-    And Enter details in Small Employer Disclosure    Bob    B    Broker
+    And Enter details in Small Employer Disclosure
+#    Bob    B    Broker
     And Enter details in General page
     And Enter details in Eligibility page    2
     And Enter details in Continuation/Disability page
@@ -57,8 +59,10 @@ Test Smoke test Enrollment from case - Broker
     And Enter details in Current Coverage page
     And Pass Application Summary page
     And Enter details in Employer's Statement page
-    And Enter details in Certification page    Bob    B    Broker
+    And Enter details in Certification page
+#    Bob    B    Broker
     And Pass Employer Submission Confirmation page
+    
     #Start Employee Enrollment Process
     And Start Employee Enrollment
     And Pass Verify Census page
@@ -69,16 +73,15 @@ Test Smoke test Enrollment from case - Broker
     And Start Enrollment for Employee    1
     And Pass Prior to Applying page
     And Enter details in Employee Information page for Employee    1
-#    And Pass Dependent Information page
     And Select Plan in Coverage Selection page    Tradition $500-10% PLATINUM
-#    And Pass Waiver page
     And Enter details in Other Coverage Information page
     And Pass Health Provider page
     And Pass Race Ethnicity page
     And Pass Enrollment Summary page
     And Enter details in Terms and Conditions page
     And Enter details in Authorization page
-    And Enter details in Signature page    Bob    B    Broker
+    And Enter details in Signature page
+#    Bob    B    Broker
     And Pass Employee Submission Confirmation page
     
     #Employee 2
@@ -86,16 +89,15 @@ Test Smoke test Enrollment from case - Broker
     And Start Enrollment for Employee    2
     And Pass Prior to Applying page
     And Enter details in Employee Information page for Employee    2
-#    And Pass Dependent Information page
     And Select Plan in Coverage Selection page    Independence $1,000-20% GOLD
-#    And Pass Waiver page
     And Enter details in Other Coverage Information page
     And Pass Health Provider page
     And Pass Race Ethnicity page
     And Pass Enrollment Summary page
     And Enter details in Terms and Conditions page
     And Enter details in Authorization page
-    And Enter details in Signature page    Bob    B    Broker
+    And Enter details in Signature page
+#    Bob    B    Broker
     And Pass Employee Submission Confirmation page
     
     #Updating Checklist
@@ -119,7 +121,7 @@ Test Smoke test Enrollment from case - Broker
     And Logs out from the application
     
     #Broker log in to application to continue work
-    And Broker logs in to application
+    And Max Broker logs in to application
     And Search for case
     And Wait a Bit
     And Open enrollment after search
@@ -127,15 +129,15 @@ Test Smoke test Enrollment from case - Broker
     #Start Acceptance
     And Start Employer Acceptance
     And Wait a Bit
-    Run Keyword Unless    '${HOST}'=='http://qashp.ct.com:8080'    Click Button    Continue
+    Run Keyword Unless    '${HOST}' in 'http://qashp.ct.com:8080' 'http://vshpwksqa01.ct.com' 'https://vshpwksuat02.ct.com'    Click Button    Continue
     And Enter details in Acceptance options page
     And Pass Start Employer Acceptance page
     And Click Button    Close
     
     #View Employee Elections
     And Start Employee Election
-    And Select Final Plan for Employee    1    Independence $1,000-20% GOLD
-    And Select Final Plan for Employee    2    Independence $1,000-20% GOLD
+#    And Select Final Plan for Employee    1    Independence $1,000-20% GOLD
+#    And Select Final Plan for Employee    2    Independence $1,000-20% GOLD
     And Click Button    Finalize Employee Elections
     And Pass Enrollment Summary - Finalize Acceptance page
     And Pass Acceptance Confirmation page
@@ -148,35 +150,39 @@ Test Smoke test Enrollment - Broker
     ...    *User Type:* Broker
     ...
     [Tags]    sg    enrollment    smoke     long
-    Given Broker logs in to application
+    Given Max Broker logs in to application
     When Selects SG Enroll
     
     #Employer Enrollment
-    And Enter details in Enrollment Set-Up page    2
-    And Enter details in Census page for Employees    2
+    And Enter details in Enrollment Set-Up page    4
+    And Enter details in Census page for Employees    4
     And Select type in Apply Options page    paper
 #    And Enter details in Employer Representative page
-    And Enter details in Start Employer Enrollment page     Bob    B    Broker
+    And Enter details in Start Employer Enrollment page
+#    Bob    B    Broker
 
     #Update Plan Offering
     And Start Update Plan Offering
     And Pass Plan Offering Options page
-    And Select Plan By Name    Tradition $500-10% PLATINUM
-    And Select Plan By Name    Independence $1,000-20% GOLD
-    And Select Plan By Name    Independence $2,000-10% HDHP SILVER
-    And Select Dental Rider For Plan    Tradition $500-10% PLATINUM    Low
-    And Select Dental Rider For Plan    Independence $2,000-10% HDHP SILVER    High
+    And Select Plan By Name    Reliance $500-10% PLATINUM
+    And Select Plan By Name    Tradition $1,750-20% HDHP SILVER
+    And Select Plan By Name    Reliance $4,000-20% HDHP BRONZE
+    And Select Dental Rider For Plan    Reliance $500-10% PLATINUM    Low
+    And Select Dental Rider For Plan    Tradition $1,750-20% HDHP SILVER    High
     And Click Button    Add Plans
     And Click Button    Continue
-    And Select Plan Election for Employee    1    Tradition $500-10% PLATINUM
-    And Select Plan Election for Employee    2    Independence $1,000-20% GOLD
+    And Select Plan Election for Employee    1    Reliance $500-10% PLATINUM
+    And Select Plan Election for Employee    2    Reliance $4,000-20% HDHP BRONZE
+    And Select Plan Election for Employee    3    Reliance $4,000-20% HDHP BRONZE
+    And Select Plan Election for Employee    4    Tradition $1,750-20% HDHP SILVER
     And Click Button    Done
     
     #Employer Application
     And Start Employer application
-    And Enter details in Small Employer Disclosure    Bob    B    Broker
+    And Enter details in Small Employer Disclosure
+#    Bob    B    Broker
     And Enter details in General page
-    And Enter details in Eligibility page    2
+    And Enter details in Eligibility page    4
     And Enter details in Continuation/Disability page
     And Enter details in Health Plan Information
     And Enter details in HRA Contribution page
@@ -185,9 +191,11 @@ Test Smoke test Enrollment - Broker
     And Enter details in Current Coverage page
     And Pass Application Summary page
     And Enter details in Employer's Statement page
-    And Enter details in Certification page    Bob    B    Broker
+    And Enter details in Certification page
+#    Bob    B    Broker
     And Wait a Bit
     And Pass Employer Submission Confirmation page
+    
     #Start Employee Enrollment Process    
     And Start Employee Enrollment
     And Pass Verify Census page
@@ -198,16 +206,15 @@ Test Smoke test Enrollment - Broker
     And Start Enrollment for Employee    1
     And Pass Prior to Applying page
     And Enter details in Employee Information page for Employee    1
-#    And Pass Dependent Information page
-    And Select Plan in Coverage Selection page    Tradition $500-10% PLATINUM
-#    And Pass Waiver page
+    And Select Plan in Coverage Selection page    Reliance $4,000-20% HDHP BRONZE
     And Enter details in Other Coverage Information page
     And Pass Health Provider page
     And Pass Race Ethnicity page
     And Pass Enrollment Summary page
     And Enter details in Terms and Conditions page
     And Enter details in Authorization page
-    And Enter details in Signature page    Bob    B    Broker
+    And Enter details in Signature page
+#    Bob    B    Broker
     And Pass Employee Submission Confirmation page
     
     #Employee 2
@@ -216,7 +223,7 @@ Test Smoke test Enrollment - Broker
     And Pass Prior to Applying page
     And Enter details in Employee Information page for Employee    2
 #    And Pass Dependent Information page
-    And Select Plan in Coverage Selection page    Independence $2,000-10% HDHP SILVER
+    And Select Plan in Coverage Selection page    Tradition $1,750-20% HDHP SILVER
 #    And Pass Waiver page
     And Enter details in Other Coverage Information page
     And Pass Health Provider page
@@ -224,11 +231,28 @@ Test Smoke test Enrollment - Broker
     And Pass Enrollment Summary page
     And Enter details in Terms and Conditions page
     And Enter details in Authorization page
-    And Enter details in Signature page    Bob    B    Broker
+    And Enter details in Signature page
     And Pass Employee Submission Confirmation page
+
+    #Employee 3
+    And Wait a Bit
+    And Start Enrollment for Employee    3
+    And Pass Prior to Applying page    Yes
+    And Pass Employee Information page
+    And Enter details in Waiver page
+    And Pass Enrollment Summary page
+    And Enter details in Terms and Conditions page
+    And Enter details in Authorization page
+    And Enter details in Signature page
+    And Pass Employee Submission Confirmation page
+
+    #Employee 4
+    And Exclude Employee    4    Other
+    
+    Close Employee Enrollment
     
     #Updating Checklist
-    And Click Link    Enrollment Summary
+    And Wait Until Keyword Succeeds    60    5    Page Should Contain    Enrollment Summary
     And Click Button    Update Checklist
     And Enter details in Enrollment Summary Checklist page
     
@@ -248,14 +272,14 @@ Test Smoke test Enrollment - Broker
     And Logs out from the application
     
     #Broker log in to application to continue work
-    And Broker logs in to application
+    And Max Broker logs in to application
     And Search for case
     And Wait a Bit
     And Open enrollment after search
     
     #Start Final Proposal
     And Click Button    Start Final Proposal
-    Run Keyword Unless    '${HOST}'=='http://qashp.ct.com:8080'     Go to the Rates page if not a new qa env
+    Run Keyword Unless    '${HOST}' in 'http://qashp.ct.com:8080' 'http://vshpwksqa01.ct.com' 'https://vshpwksuat02.ct.com'     Go to the Rates page if not a new qa env
     And Pass Rates page
     And Enter details in Generate Proposal page
     Then Page Should Contain    Proposal generation and delivery completed.
@@ -264,7 +288,7 @@ Test Smoke test Enrollment - Broker
 
     #Start Acceptance
     And Start Employer Acceptance
-    Run Keyword Unless    '${HOST}'=='http://qashp.ct.com:8080'    Click Button    Continue
+    Run Keyword Unless    '${HOST}' in 'http://qashp.ct.com:8080' 'http://vshpwksqa01.ct.com' 'https://vshpwksuat02.ct.com'    Click Button    Continue
     And Enter details in Acceptance options page    paper
     And Pass Start Employer Acceptance page
     And Pass Employer Demographics page
@@ -272,13 +296,14 @@ Test Smoke test Enrollment - Broker
     And Pass Eligibility Requirements page
     And Enter details in Coverage Details page
     And Pass Employer Acceptance Summary
-    And Enter details in Employer Acceptance Signature page    Bob    B    Broker
+    And Enter details in Employer Acceptance Signature page
+#    Bob    B    Broker
     And Wait a Bit
     
     #View Employee Elections
     And Start Employee Election
-    And Select Final Plan for Employee    1    Independence $2,000-10% HDHP SILVER
-    And Select Final Plan for Employee    2    Independence $2,000-10% HDHP SILVER
+#    And Select Final Plan for Employee    1    Independence $2,000-10% HDHP SILVER
+#    And Select Final Plan for Employee    2    Independence $2,000-10% HDHP SILVER
     And Click Button    Finalize Employee Elections
     And Pass Enrollment Summary - Finalize Acceptance page
     And Pass Acceptance Confirmation page

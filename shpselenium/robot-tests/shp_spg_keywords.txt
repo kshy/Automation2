@@ -17,6 +17,12 @@ Library           Collections
 
 ####################### Demograpchics keywords ################
 
+Select county
+	[Arguments]    ${County}
+	Click Element    xpath=//*[@name='countyId']
+	Wait a Bit
+	Click Element    xpath=//*[contains(text(), '${County}')]
+
 Get site
     ${url}=    Set Variable    ${HOST}${CONTEXT_ROOT}/exemplar/Portal.action
     Log    URL:${url}    WARN
@@ -951,7 +957,7 @@ Add plan to cart
 Add dental rider to plan
 #${dental}   Low    High
     [Arguments]    ${dental}    ${planname}
-    Wait Until Keyword Succeeds    30    5    Click Element    xpath=//div[@class='benefit-section Medical' and *[contains(.,'${planname}')]]/following-sibling::div/div[@class='plan-card' and div[contains(text(),'${dental}')]]//a[contains(text(),'Add')]
+    Wait Until Keyword Succeeds    60    5    Click Element    xpath=//div[@class='benefit-section Medical' and *[contains(.,'${planname}')]]/following-sibling::div/div[@class='plan-card' and div[contains(text(),'${dental}')]]//a[contains(text(),'Add')]
 
 Check that added plan is displayed in the cart
     Wait Until Page Contains    Items In Your Cart
@@ -1027,16 +1033,16 @@ Select plan(s) small view
 
 Click Add to Cart for plan
     [Arguments]    ${planName}
-    Wait Until Keyword Succeeds    30    5    Click Element    xpath=//div[@class='plan-card-details' and a[contains(text(),'${planName}')]]//a[text()='Add to Cart']
+    Wait Until Keyword Succeeds    60    5    Click Element    xpath=//div[@class='plan-card-details' and a[contains(text(),'${planName}')]]//a[text()='Add to Cart']
     Set Global Variable    ${selected plan}    ${planName}
     
 Click Add to Quote for plan
     [Arguments]    ${planName}
-    Wait Until Keyword Succeeds    30    5    Click Element    xpath=//div[@class='plan-card-details' and a[contains(text(),'${planName}')]]//a[contains(.,'Add to Quote')]
+    Wait Until Keyword Succeeds    60    5    Click Element    xpath=//div[@class='plan-card-details' and a[contains(text(),'${planName}')]]//a[contains(.,'Add to Quote')]
 
 Click Dental to plan
     [Arguments]    ${dental}
-    Wait Until Keyword Succeeds    30    5    Click Element    xpath=//div[@class='plan-card' and div[contains(text(),'${dental}')]]//a[text()='Add']
+    Wait Until Keyword Succeeds    60    5    Click Element    xpath=//div[@class='plan-card' and div[contains(text(),'${dental}')]]//a[text()='Add']
 
 #Enter details in Wellmark SSO Front Door page
 #    Wait Until Page Contains    Wellmark SSO Front Door    ${SELENIUM_TIMEOUT}    Wellmark SSO Front Door page has not displayed
@@ -1160,11 +1166,26 @@ Shah Broker logs in to application
     Set Global Variable    ${userMI}    ${EMPTY}
     Set Global Variable    ${userLName}    Broker
 
+Max Broker logs in to application
+    Click Link    Returning User Login
+    Wait Until Page Contains    Welcome    ${SELENIUM_TIMEOUT}    Welcome screen has not displayed
+    Input Text    name=username    maxbroker
+    Run Keyword If    '${HOST}'=='https://securityhealth-stg.healthinsurance-asp.com'    Input Text    name=password    password1
+    Run Keyword Unless    '${HOST}'=='https://securityhealth-stg.healthinsurance-asp.com'    Input Text    name=password    password
+    Comment    Introduced sleep as per 6.1 maint application behaviour
+    Sleep    2s
+    Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Click Button    name=login.button
+    Wait Until Page Contains    Welcome, max broker!    ${SELENIUM_TIMEOUT}    Dashboard has not displayed
+    Set Global Variable    ${userFName}    max
+    Set Global Variable    ${userMI}    ${EMPTY}
+    Set Global Variable    ${userLName}    broker
+
 Sales Represenative logs in to application
     Click Link    Returning User Login
     Wait Until Page Contains    Welcome    ${SELENIUM_TIMEOUT}    Welcome screen has not displayed
     Input Text    name=username    sallysales
-    Input Text    name=password    password
+    Run Keyword If    '${HOST}'=='https://securityhealth-stg.healthinsurance-asp.com'    Input Text    name=password    password1
+    Run Keyword Unless    '${HOST}'=='https://securityhealth-stg.healthinsurance-asp.com'    Input Text    name=password    password
     Comment    Introduced sleep as per 6.1 maint application behaviour
     Sleep    2s
     Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Click Button    name=login.button
@@ -1177,7 +1198,8 @@ Admin Reviewer logs in to application
     Click Link    Returning User Login
     Wait Until Page Contains    Welcome    ${SELENIUM_TIMEOUT}    Welcome screen has not displayed
     Input Text    name=username    adminreviewuser
-    Input Text    name=password    password
+    Run Keyword If    '${HOST}'=='https://securityhealth-stg.healthinsurance-asp.com'    Input Text    name=password    password1
+    Run Keyword Unless    '${HOST}'=='https://securityhealth-stg.healthinsurance-asp.com'    Input Text    name=password    password
     Comment    Introduced sleep as per 6.1 maint application behaviour
     Sleep    2s
     Wait Until Keyword Succeeds    ${SELENIUM_TIMEOUT}    1s    Click Button    name=login.button
@@ -1214,7 +1236,7 @@ Admin Reviewer approves application
     Click Button    Decision
     Wait Until Keyword Succeeds    30    5    Page Should Contain Element    xpath=//button[contains(text(),'Approve')]    Decision page was not displayed.
     Click Button    Approve
-    Wait Until Keyword Succeeds    60    5    Page Should Contain Element    xpath=//tr[td[contains(.,'Application Status')]]/td[contains(text(),'Accepted')]    Application was not Accepted or page takes too long to load.
+    Verify Status of application as Producer    Accepted
 
 Selects IFP Case
     Wait Until Page Contains    Dashboard    ${SELENIUM_TIMEOUT}
@@ -1312,17 +1334,30 @@ Customer Connects Gmail
     Wait Until Page Contains    Gmail    ${SELENIUM_TIMEOUT}    Gmail Home screen wasn't displayed
     ${retElem}=    Run Keyword And Ignore Error    Element Should Not Be Visible    name=Email
     Run Keyword If    '${retElem[0]}'=='FAIL'    Login Gmail
-    Run Keyword Unless    '${retElem[0]}'=='FAIL'    Wait Until Keyword Succeeds    120s    2s    Page Should Contain    Inbox
+    Run Keyword Unless    '${retElem[0]}'=='FAIL'    Log in Gmail from page with pic
     
 Login Gmail
+    Input Text    name=Email    ${email}
+    Input Text    name=Passwd    ${emailPwd}
+    Click Button    name=signI
+    ${isSpamPageDisplayed}=    Get Matching Xpath Count    xpath=//*[@value='Skip for now']
+    Run Keyword Unless    '${isSpamPageDisplayed}'=='0'    Click Element    xpath=//*[@value='Skip for now']
+    ${isSpamPageDisplayed2}=    Get Matching Xpath Count    xpath=//*[@id='gmail-sign-in']
+    Run Keyword Unless    '${isSpamPageDisplayed2}'=='0'    Log in Gmail from page with pic
+    Wait Until Keyword Succeeds    120s    2s    Page Should Contain    Inbox
+
+Log in Gmail from page with pic
+    Click Element    xpath=//*[@id='gmail-sign-in']
     Input Text    name=Email    ${email}
     Input Text    name=Passwd    ${emailPwd}
     Click Button    name=signIn
     ${isSpamPageDisplayed}=    Get Matching Xpath Count    xpath=//*[@value='Skip for now']
     Run Keyword Unless    '${isSpamPageDisplayed}'=='0'    Click Element    xpath=//*[@value='Skip for now']
+    ${isSpamPageDisplayed2}=    Get Matching Xpath Count    xpath=//*[@id='gmail-sign-in']
+    Run Keyword Unless    '${isSpamPageDisplayed2}'=='0'    Log in Gmail from page with pic
     Wait Until Keyword Succeeds    120s    2s    Page Should Contain    Inbox
-    
 
+    
 User opens email invitation message
     Wait a Bit
     ${EMAIL_TIMEOUT}=    Set Variable    1000
@@ -1419,6 +1454,7 @@ Broker completes Prior To Applying page
     Run Keyword If    '${method}'=='Broker Start Online'    Click Element    priorToApplyingForm_whoWillStartbroker
     Run Keyword If    '${method}'=='Client Complete Paper'    Click Element    priorToApplyingForm_whoWillStartpaperapp
     Run Keyword If    '${method}'=='Broker Complete Online'    Click Element    priorToApplyingForm_whoWillStartpaperAppOnline
+    Set Global Variable    ${ifpCaseName}    ${primaryFName} ${primaryLName}
     Click Link    Continue
     
 Click Start Application Button
@@ -1496,10 +1532,14 @@ Verify that Plan is selected
     [Arguments]    ${planName}
     Wait Until Keyword Succeeds    ${APPCONF_LOAD_TIMEOUT}    2s    Page Should Contain Element    xpath=//div[div[contains(text(),'${planName}')]]//span[text()='Selected Plan']
 
-Verify Status of application
+Verify Status of application - consumer
     [Arguments]    ${status}
     Wait Until Keyword Succeeds    30    5    Page Should Contain    Account Overview    My Account page wasn't opened
     Page Should Contain Element    xpath=.//tr[td[contains(text(),'${primaryLName}, ${primaryFName}')]]/td[contains(text(),'${status}')]
+
+Verify Status of application as Producer
+	[Arguments]    ${status}
+	Wait Until Keyword Succeeds    60    5    Page Should Contain Element    xpath=//tr[td[contains(.,'Application Status')]]/td[contains(text(),'${status}')]    Application was not Accepted or page takes too long to load.
 
 Enter details in Current Other Coverage page
     [Arguments]    ${option}=No
@@ -1676,7 +1716,7 @@ ${userRole} enters Legal Guardian Info and update Coverage selection
     Input Text    Application.Applicant.Guardian.Address_1    Blue Mound Drive 137
     Input Text    Application.Applicant.Guardian.City    Phila
     Select From List    Application.Applicant.Guardian.State    WI
-    Input Text    Application.Applicant.Guardian.Zip    54514
+    Input Text    Application.Applicant.Guardian.Zip    54401
     Run Keyword If    '${userRole}'=='Consumer'    Set Global Variable    ${userFName}    ${guardianFName}
 #    Input Text    Application.Applicant.First_Name    ${child1FName}
 #    Input Text    Application.Applicant.Last_Name    ${child1LName}
